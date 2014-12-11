@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Iterator_MotorImpostos>
+            <version>1.0.0</version>
+        </Iterator_MotorImpostos>
+    </modules>
+    
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Iterator_MotorImpostos before="Mage_Adminhtml">Iterator_MotorImpostos_Adminhtml</Iterator_MotorImpostos>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    
+    <adminhtml>
+        <layout>
+            <updates>
+                <motorimpostos module="Iterator_MotorImpostos">
+                    <file>iterator_motorimpostos.xml</file>
+                </motorimpostos>
+            </updates>
+        </layout>
+    </adminhtml>
+    
+    <global>
+        <helpers>
+            <motorimpostos>
+                <class>Iterator_MotorImpostos_Helper</class>
+            </motorimpostos>
+        </helpers>
+        <blocks>
+            <motorimpostos>
+                <class>Iterator_MotorImpostos_Block</class>
+            </motorimpostos>
+        </blocks>
+        <models>
+            <motorimpostos>
+                <class>Iterator_MotorImpostos_Model</class>
+                <resourceModel>motorimpostos_mysql4</resourceModel>
+            </motorimpostos>
+            <motorimpostos_mysql4>
+                <class>Iterator_MotorImpostos_Model_Mysql4</class>
+                <entities>
+                    <ncm>
+                        <table>iterator_motorimpostos_ncm</table>
+                    </ncm>
+                    <ncmuf>
+                        <table>iterator_motorimpostos_ncm_uf</table>
+                    </ncmuf>
+                </entities>
+            </motorimpostos_mysql4>
+        </models>
+        <resources>
+            <motorimpostos_setup>
+                <setup>
+                    <module>Iterator_MotorImpostos</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </motorimpostos_setup>
+            <motorimpostos_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </motorimpostos_write>
+            <motorimpostos_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </motorimpostos_read>
+        </resources>
+    </global>
+</config>
