@@ -29,8 +29,8 @@
 $installer = $this;
 $installer->startSetup();
 $installer->run("
-   CREATE  TABLE IF NOT EXISTS `{$installer->getTable('motorimpostos/ncm')}` (
-    `ncm_id` INT(12) UNSIGNED NOT NULL AUTO_INCREMENT,
+   CREATE  TABLE IF NOT EXISTS `{$installer->getTable('motorimpostos/imposto')}` (
+    `imposto_id` INT(12) UNSIGNED NOT NULL AUTO_INCREMENT,
     `ncm_codigo` INT(8) UNSIGNED NOT NULL,
     `cfop_codigo` INT(4) UNSIGNED NULL,
     `cfop_st_codigo` INT(4) UNSIGNED NULL,
@@ -49,25 +49,25 @@ $installer->run("
     `aliquota_ii` DOUBLE(7,4) UNSIGNED NULL,
     `aliquota_iss` DOUBLE(7,4) UNSIGNED NULL,
     `aliquota_interestadual` DOUBLE(7,4) UNSIGNED NULL,
-    PRIMARY KEY (`ncm_id`),
+    PRIMARY KEY (`imposto_id`),
     UNIQUE INDEX `ncm_codigo_UNIQUE` (`ncm_codigo` ASC))
   ENGINE = InnoDB CHARSET=utf8;
   
-  CREATE  TABLE IF NOT EXISTS `{$installer->getTable('motorimpostos/ncmuf')}` (
-    `ncm_uf_id` INT(12) UNSIGNED NOT NULL AUTO_INCREMENT,
-    `ncm_id` INT(12) UNSIGNED NOT NULL,
+  CREATE  TABLE IF NOT EXISTS `{$installer->getTable('motorimpostos/impostouf')}` (
+    `imposto_uf_id` INT(12) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `imposto_id` INT(12) UNSIGNED NOT NULL,
     `region_id` INT(10) UNSIGNED NOT NULL,
     `aliquota_icms` DOUBLE(7,4) UNSIGNED NULL,
     `mva_original` DOUBLE(7,4) UNSIGNED NULL,
-    PRIMARY KEY (`ncm_uf_id`),
-    INDEX `fk_iterator_motorimpostos_ncm_uf_iterator_motorimpostos_ncm_idx` (`ncm_id` ASC),
-    INDEX `fk_iterator_motorimpostos_ncm_uf_directory_country_region1_idx` (`region_id` ASC),
-    CONSTRAINT `fk_iterator_motorimpostos_ncm_uf_iterator_motorimpostos_ncm`
-      FOREIGN KEY (`ncm_id`)
-      REFERENCES `{$installer->getTable('motorimpostos/ncm')}` (`ncm_id`)
+    PRIMARY KEY (`imposto_uf_id`),
+    INDEX `fk_motorimpostos_imposto_uf_motorimpostos_imposto_idx` (`imposto_id` ASC),
+    INDEX `fk_motorimpostos_imposto_uf_directory_country_region1_idx` (`region_id` ASC),
+    CONSTRAINT `fk_motorimpostos_imposto_uf_motorimpostos_imposto`
+      FOREIGN KEY (`imposto_id`)
+      REFERENCES `{$installer->getTable('motorimpostos/imposto')}` (`imposto_id`)
       ON DELETE CASCADE
       ON UPDATE CASCADE,
-    CONSTRAINT `fk_iterator_motorimpostos_ncm_uf_directory_country_region1`
+    CONSTRAINT `fk_motorimpostos_imposto_uf_directory_country_region1`
       FOREIGN KEY (`region_id`)
       REFERENCES `{$installer->getTable('directory/country_region')}` (`region_id`)
       ON DELETE CASCADE

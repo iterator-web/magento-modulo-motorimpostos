@@ -26,7 +26,7 @@
  * @license    O Produto é protegido por leis de direitos autorais, bem como outras leis de propriedade intelectual.
  */
 
-class Iterator_MotorImpostos_Adminhtml_NcmController extends Mage_Adminhtml_Controller_Action {
+class Iterator_MotorImpostos_Adminhtml_ImpostoController extends Mage_Adminhtml_Controller_Action {
     
     public function _construct() {
         $helper = Mage::helper('motorimpostos');
@@ -45,10 +45,10 @@ class Iterator_MotorImpostos_Adminhtml_NcmController extends Mage_Adminhtml_Cont
     
     protected function _initAction() {
         $this->loadLayout()
-            ->_setActiveMenu('sales/iterator_motorimpostos/ncm')
-            ->_title($this->__('Sales'))->_title($this->__('Motor de Impostos'))
+            ->_setActiveMenu('sales/iterator_motorimpostos/imposto')
+            ->_title($this->__('Sales'))->_title($this->__('Taxas e Impostos'))
             ->_addBreadcrumb($this->__('Sales'), $this->__('Sales'))
-            ->_addBreadcrumb($this->__('Motor de Impostos'), $this->__('Motor de Impostos'));
+            ->_addBreadcrumb($this->__('Taxas e Impostos'), $this->__('Motor de Impostos'));
          
         return $this;
     }
@@ -59,7 +59,7 @@ class Iterator_MotorImpostos_Adminhtml_NcmController extends Mage_Adminhtml_Cont
     
     public function exportCsvAction() {
         $fileName   = 'ncm_impostos.csv';
-        $content    = $this->getLayout()->createBlock('motorimpostos/adminhtml_motorimpostosncm_grid')
+        $content    = $this->getLayout()->createBlock('motorimpostos/adminhtml_motorimpostos_grid')
             ->getCsv();
  
         $this->_sendUploadResponse($fileName, $content);
@@ -67,7 +67,7 @@ class Iterator_MotorImpostos_Adminhtml_NcmController extends Mage_Adminhtml_Cont
  
     public function exportXmlAction() {
         $fileName   = 'ncm_impostos.xml';
-        $content    = $this->getLayout()->createBlock('motorimpostos/adminhtml_motorimpostosncm_grid')
+        $content    = $this->getLayout()->createBlock('motorimpostos/adminhtml_motorimpostos_grid')
             ->getXml();
  
         $this->_sendUploadResponse($fileName, $content);

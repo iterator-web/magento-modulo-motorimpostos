@@ -47,12 +47,12 @@
             <motorimpostos_mysql4>
                 <class>Iterator_MotorImpostos_Model_Mysql4</class>
                 <entities>
-                    <ncm>
-                        <table>iterator_motorimpostos_ncm</table>
-                    </ncm>
-                    <ncmuf>
-                        <table>iterator_motorimpostos_ncm_uf</table>
-                    </ncmuf>
+                    <imposto>
+                        <table>iterator_motorimpostos_imposto</table>
+                    </imposto>
+                    <impostouf>
+                        <table>iterator_motorimpostos_imposto_uf</table>
+                    </impostouf>
                 </entities>
             </motorimpostos_mysql4>
         </models>

@@ -26,11 +26,11 @@
  * @license    O Produto é protegido por leis de direitos autorais, bem como outras leis de propriedade intelectual.
  */
 
-class Iterator_MotorImpostos_Model_Mysql4_NcmUf extends Mage_Core_Model_Mysql4_Abstract {
-
+class Iterator_MotorImpostos_Model_Imposto extends Mage_Core_Model_Abstract
+{
     protected function _construct()
     {
-        $this->_init('motorimpostos/ncmuf', 'ncm_uf_id');
+        $this->_init('motorimpostos/imposto');
     }
 }
 
