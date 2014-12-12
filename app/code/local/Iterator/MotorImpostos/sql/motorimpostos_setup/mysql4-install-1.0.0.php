@@ -49,6 +49,8 @@ $installer->run("
     `aliquota_ii` DOUBLE(7,4) UNSIGNED NULL,
     `aliquota_iss` DOUBLE(7,4) UNSIGNED NULL,
     `aliquota_interestadual` DOUBLE(7,4) UNSIGNED NULL,
+    `created_time` DATETIME NULL,
+    `update_time` DATETIME NULL,
     PRIMARY KEY (`imposto_id`),
     UNIQUE INDEX `ncm_codigo_UNIQUE` (`ncm_codigo` ASC))
   ENGINE = InnoDB CHARSET=utf8;
