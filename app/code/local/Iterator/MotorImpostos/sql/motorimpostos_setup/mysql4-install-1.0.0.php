@@ -29,11 +29,19 @@
 $installer = $this;
 $installer->startSetup();
 $installer->run("
+   CREATE  TABLE IF NOT EXISTS `{$installer->getTable('motorimpostos/cfop')}` (
+    `cfop_id` INT(12) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `codigo` INT(4) UNSIGNED NOT NULL,
+    `nome` VARCHAR(255) NOT NULL,
+    `detalhes` TEXT NULL,
+    PRIMARY KEY (`cfop_id`),
+    UNIQUE INDEX `cfop_codigo_UNIQUE` (`codigo` ASC))
+   ENGINE = InnoDB;
+
    CREATE  TABLE IF NOT EXISTS `{$installer->getTable('motorimpostos/imposto')}` (
     `imposto_id` INT(12) UNSIGNED NOT NULL AUTO_INCREMENT,
     `ncm_codigo` INT(8) UNSIGNED NOT NULL,
-    `cfop_codigo` INT(4) UNSIGNED NULL,
-    `cfop_st_codigo` INT(4) UNSIGNED NULL,
+    `cfop_id` INT(12) UNSIGNED NOT NULL,
     `icms_cst` TINYINT(3) UNSIGNED NULL,
     `icms_cst_st` TINYINT(3) UNSIGNED NULL,
     `icms_origem` TINYINT(2) UNSIGNED NULL,
@@ -52,7 +60,13 @@ $installer->run("
     `created_time` DATETIME NULL,
     `update_time` DATETIME NULL,
     PRIMARY KEY (`imposto_id`),
-    UNIQUE INDEX `ncm_codigo_UNIQUE` (`ncm_codigo` ASC))
+    UNIQUE INDEX `ncm_codigo_UNIQUE` (`ncm_codigo` ASC),
+    INDEX `fk_iterator_motorimpostos_imposto_iterator_motorimpostos_cf_idx` (`cfop_id` ASC),
+    CONSTRAINT `fk_iterator_motorimpostos_imposto_iterator_motorimpostos_cfop1`
+      FOREIGN KEY (`cfop_id`)
+      REFERENCES `{$installer->getTable('motorimpostos/cfop')}` (`cfop_id`)
+      ON DELETE CASCADE
+      ON UPDATE CASCADE)
   ENGINE = InnoDB CHARSET=utf8;
   
   CREATE  TABLE IF NOT EXISTS `{$installer->getTable('motorimpostos/impostouf')}` (

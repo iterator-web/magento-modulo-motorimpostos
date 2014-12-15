@@ -47,6 +47,9 @@
             <motorimpostos_mysql4>
                 <class>Iterator_MotorImpostos_Model_Mysql4</class>
                 <entities>
+                    <cfop>
+                        <table>iterator_motorimpostos_cfop</table>
+                    </cfop>
                     <imposto>
                         <table>iterator_motorimpostos_imposto</table>
                     </imposto>
