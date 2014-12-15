@@ -34,6 +34,8 @@ $installer->run("
     `codigo` INT(4) UNSIGNED NOT NULL,
     `nome` VARCHAR(255) NOT NULL,
     `detalhes` TEXT NULL,
+    `created_time` DATETIME NULL,
+    `update_time` DATETIME NULL,
     PRIMARY KEY (`cfop_id`),
     UNIQUE INDEX `cfop_codigo_UNIQUE` (`codigo` ASC))
    ENGINE = InnoDB;
