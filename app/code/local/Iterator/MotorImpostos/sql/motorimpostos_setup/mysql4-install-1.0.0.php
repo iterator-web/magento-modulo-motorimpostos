@@ -62,7 +62,6 @@ $installer->run("
     `created_time` DATETIME NULL,
     `update_time` DATETIME NULL,
     PRIMARY KEY (`imposto_id`),
-    UNIQUE INDEX `ncm_codigo_UNIQUE` (`ncm_codigo` ASC),
     INDEX `fk_iterator_motorimpostos_imposto_iterator_motorimpostos_cf_idx` (`cfop_id` ASC),
     CONSTRAINT `fk_iterator_motorimpostos_imposto_iterator_motorimpostos_cfop1`
       FOREIGN KEY (`cfop_id`)
