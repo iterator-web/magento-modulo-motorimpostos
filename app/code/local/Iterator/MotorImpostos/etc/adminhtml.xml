@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <translate>
+        <modules>
+            <Iterator_MotorImpostos>
+                <files>
+                    <default>Iterator_MotorImpostos.csv</default>
+                </files>
+            </Iterator_MotorImpostos>
+        </modules>
+    </translate>
+
+    <menu>
+        <sales>
+            <children>
+                <tax translate="title" module="tax">
+                    <disabled>1</disabled>
+                </tax>
+                <motorimpostos module="motorimpostos">
+                    <title>Taxas e Impostos</title>
+                    <sort_order>999</sort_order>               
+                    <children>
+                        <iterator_motorimpostos_cfop module="motorimpostos">
+                            <title>Gerenciar CFOP</title>
+                            <sort_order>0</sort_order>
+                            <action>adminhtml/cfop</action>
+                        </iterator_motorimpostos_cfop>
+                        <iterator_motorimpostos_imposto module="motorimpostos">
+                            <title>Gerenciar Impostos</title>
+                            <sort_order>0</sort_order>
+                            <action>adminhtml/imposto</action>
+                        </iterator_motorimpostos_imposto>
+                        <settings translate="title" module="motorimpostos">
+                            <title><![CDATA[Op&ccedil;&otilde;es]]></title>
+                            <action><!-- TODO: Caminho system --></action>
+                            <sort_order>1</sort_order>
+                        </settings>
+                    </children>
+                </motorimpostos>
+            </children>
+        </sales>
+    </menu>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <sales>
+                        <children>
+                            <motorimpostos>
+                                <title>Taxas e Impostos</title>
+                                <sort_order>99</sort_order>
+                                <children>
+                                    <iterator_motorimpostos_cfop module="motorimpostos">
+                                        <title>Gerenciar CFOP</title>
+                                        <sort_order>0</sort_order>
+                                    </iterator_motorimpostos_cfop>
+                                    <iterator_motorimpostos_imposto>
+                                        <title>Gerenciar Impostos</title>
+                                        <sort_order>0</sort_order>
+                                    </iterator_motorimpostos_imposto>
+                                </children>
+                            </motorimpostos>
+                        </children>
+                    </sales>
+                    <!--      
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <shipping>
+                                        <children>
+                                            <sigep>
+                                                <title>SIGEP</title>
+                                            </sigep>
+                                        </children>
+                                    </shipping>  
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                    -->
+                </children>
+            </admin>
+        </resources>
+    </acl>
+    <layout>
+        <updates>
+            <motorimpostos module="Iterator_MotorImpostos">
+                <file>iterator_motorimpostos.xml</file>
+            </motorimpostos>
+        </updates>
+    </layout>
+</config>

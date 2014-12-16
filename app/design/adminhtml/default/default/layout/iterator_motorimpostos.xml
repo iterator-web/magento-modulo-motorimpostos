@@ -1,4 +1,14 @@
 <?xml version="1.0"?>
 <layout>
-    
+    <adminhtml_cfop_index>
+        <reference name="content">
+            <block type="motorimpostos/adminhtml_cfop" name="motorimpostos_cfop" ></block>
+        </reference>
+    </adminhtml_cfop_index>
+    <adminhtml_imposto_index>
+        <reference name="content">
+            <block type="motorimpostos/adminhtml_cfopswitcher" name="motorimpostos_cfopswitcher" ></block>
+            <block type="motorimpostos/adminhtml_imposto" name="motorimpostos_imposto" />
+        </reference>
+    </adminhtml_imposto_index>
 </layout>
