@@ -129,6 +129,21 @@ class Iterator_MotorImpostos_Block_Adminhtml_Cfop_Grid extends Mage_Adminhtml_Bl
          
         return parent::_prepareColumns();
     }
+    
+    public function getRowUrl($row) {
+        return $this->getUrl('*/*/edit', array('id' => $row->getId()));
+    }
+    
+    protected function _prepareMassaction() {
+        $this->setMassactionIdField('cfop_id');
+        $this->getMassactionBlock()->setFormFieldName('cfop_id');
+        $this->getMassactionBlock()->addItem('delete', array(
+        'label'=> Mage::helper('motorimpostos')->__('Delete'),
+        'url'  => $this->getUrl('*/*/massDelete', array('' => '')),
+        'confirm' => Mage::helper('motorimpostos')->__('Are you sure?')
+        ));
+        return $this;
+    }
 }
 
 ?>
