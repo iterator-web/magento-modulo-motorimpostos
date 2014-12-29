@@ -26,29 +26,21 @@
  * @license    O Produto é protegido por leis de direitos autorais, bem como outras leis de propriedade intelectual.
  */
 
-class Iterator_MotorImpostos_Model_Mysql4_Cfop_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract {
-
-    protected function _construct() {
-            $this->_init('motorimpostos/cfop');
-    }
+class Iterator_MotorImpostos_Block_Adminhtml_Imposto_Edit_Form extends Mage_Adminhtml_Block_Widget_Form { 
     
-    public function toOptionArray() {
-        $opcoes = array(
-            array(
-                'value' => '0',
-                'label' => utf8_encode('Não')
-            )
-        );
-        foreach ($this->_toOptionArray('cfop_id', 'codigo') as $index => $value) {
-            $opcoes[] = array(
-               'value' => $value['value'],
-               'label' => $value['label']
-            );
-        }
-        return $opcoes;
-    }
-    
-    public function toOptionArrayMulti() {
-        return $this->_toOptionArray('cfop_id', 'codigo');
-    }
+    protected function _prepareForm() {  
+        $model = Mage::registry('motorimpostos/imposto');
+     
+        $form = new Varien_Data_Form(array(
+            'id'        => 'edit_form',
+            'action'    => $this->getUrl('*/*/save', array('imposto_id' => $this->getRequest()->getParam('imposto_id'))),
+            'method'    => 'post'
+        ));
+        
+        $form->setValues($model->getData());
+        $form->setUseContainer(true);
+        $this->setForm($form);
+     
+        return parent::_prepareForm();
+    }  
 }

@@ -53,13 +53,128 @@ class Iterator_MotorImpostos_Adminhtml_CfopController extends Mage_Adminhtml_Con
         return $this;
     }
     
+    public function newAction() {
+        $this->_forward('edit');
+    }
+    
+    public function editAction() {
+        $cfopId  = $this->getRequest()->getParam('id');
+        $model = Mage::getModel('motorimpostos/cfop');
+     
+        if ($cfopId) {
+            $model->load($cfopId);   
+            if (!$model->getId()) {
+                Mage::getSingleton('adminhtml/session')->addError($this->__(utf8_encode('Este CFOP já não existe mais.')));
+                $this->_redirect('*/*/');    
+                return;
+            }  
+        }  
+     
+        $this->_title($model->getId() ? $model->getCodigo() : $this->__('Novo CFOP'));
+     
+        $data = Mage::getSingleton('adminhtml/session')->getCfopData(true);
+        if (!empty($data)) {
+            $model->setData($data);
+        }  
+     
+        Mage::register('motorimpostos/cfop', $model);
+     
+        $this->_initAction()
+            ->_addBreadcrumb($cfopId ? $this->__('Editar CFOP') : $this->__('Novo CFOP'), $cfopId ? $this->__('Editar CFOP') : $this->__('Novo CFOP'))
+            ->_addContent($this->getLayout()->createBlock('motorimpostos/adminhtml_cfop_edit')->setData('action', $this->getUrl('*/*/save')))
+            ->renderLayout();
+    }
+    
+    public function saveAction() {
+        $postData = $this->getRequest()->getPost();
+        if ($postData) {
+            $model = Mage::getSingleton('motorimpostos/cfop');
+            $model->setData($postData);
+            
+            if (isset($postData['created_time']) && $postData['created_time']) {
+                $model->setUpdateTime(Mage::getModel('core/date')->gmtDate());
+            } else {
+                $model->setCreatedTime(Mage::getModel('core/date')->gmtDate());
+                $model->setUpdateTime(Mage::getModel('core/date')->gmtDate());
+            }
+            
+            try {
+                $model->save();
+                
+                /*
+                 * TODO: Verificar o campo 'cfop_duplicar' se é diferente de null e diferente de 0.
+                 * Caso sim fazer o collection com filtro de todos as taxas e impostos definidas para o 
+                 * 'cfop_id' selecionado e duplicar para o 'cfop_id' que acabou de ser gerado.
+                 */
+                
+                Mage::getSingleton('adminhtml/session')->addSuccess($this->__('O CFOP foi salvo com sucesso.'));
+                if ($this->getRequest()->getParam('back')) {
+                    $this->_redirect('*/*/edit', array('id' => $model->getId()));
+                    return;
+                }
+                $this->_redirect('*/*/');
+                return;
+            }
+            catch (Mage_Core_Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            }
+            catch (Exception $e) {
+                if(strpos($e, 'cfop_codigo_UNIQUE') !== false) {
+                    Mage::getSingleton('adminhtml/session')->addError($this->__(utf8_encode('O Código é um campo que deve ser único e o valor informado já está em uso em outro cadastro de CFOP.')));
+                } else {
+                    Mage::getSingleton('adminhtml/session')->addError($this->__('Um erro ocorreu enquanto este CFOP era salvo.'));
+                }
+            }
+            Mage::getSingleton('adminhtml/session')->setCfopData($postData);
+            $this->_redirectReferer();
+        }
+    }
+    
+    public function deleteAction() {
+        $cfopId = (int) $this->getRequest()->getParam('id');
+        if ($cfopId) {
+            try {
+                $cfopModel = Mage::getModel('motorimpostos/cfop');
+                $cfopModel->load($cfopId)->delete();
+                Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__(utf8_encode('CFOP excluído com sucesso.')));
+                $this->_redirect('*/*/');
+            } catch (Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+                $this->_redirect('*/*/edit', array('cfop_id' => $this->getRequest()->getParam('cfop_id')));
+            }
+        }
+        $this->_redirect('*/*/');
+    }
+    
+    public function massDeleteAction() {
+        $cfopIds = $this->getRequest()->getParam('cfop_id');
+        if (!is_array($cfopIds)) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('motorimpostos')->__('Por favor selecione o(s) CFOP.'));
+        } else {
+            try {
+                $cfopModel = Mage::getModel('motorimpostos/cfop');
+                foreach ($cfopIds as $cfopId) {
+                    $cfopModel->load($cfopId)->delete();
+                }
+                Mage::getSingleton('adminhtml/session')->addSuccess(
+                        Mage::helper('motorimpostos')->__(
+                                utf8_encode('Total de %d CFOP foram excluídos.'), count($cfopIds)
+                        )
+                );
+            } catch (Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            }
+        }
+        $this->_redirect('*/*/');
+    }
+    
     protected function _isAllowed() {
         return Mage::getSingleton('admin/session')->isAllowed('sales/motorimpostos');
     }
     
     public function exportCsvAction() {
         $fileName   = 'cfop.csv';
-        $content    = $this->getLayout()->createBlock('motorimpostos/adminhtml_motorimpostos_cfop_grid')
+        $content    = $this->getLayout()->createBlock('motorimpostos/adminhtml_cfop_grid')
             ->getCsv();
  
         $this->_sendUploadResponse($fileName, $content);
@@ -67,7 +182,7 @@ class Iterator_MotorImpostos_Adminhtml_CfopController extends Mage_Adminhtml_Con
  
     public function exportXmlAction() {
         $fileName   = 'cfop.xml';
-        $content    = $this->getLayout()->createBlock('motorimpostos/adminhtml_motorimpostos_cfop_grid')
+        $content    = $this->getLayout()->createBlock('motorimpostos/adminhtml_cfop_grid')
             ->getXml();
  
         $this->_sendUploadResponse($fileName, $content);

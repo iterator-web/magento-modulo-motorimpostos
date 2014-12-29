@@ -11,4 +11,10 @@
             <block type="motorimpostos/adminhtml_imposto" name="motorimpostos_imposto" />
         </reference>
     </adminhtml_imposto_index>
+    <adminhtml_imposto_edit>
+        <update handle="editor"/>
+        <reference name="head">
+            <action method="addJs"><script>iterator/motor_impostos.js</script></action>
+        </reference>
+    </adminhtml_imposto_edit>
 </layout>

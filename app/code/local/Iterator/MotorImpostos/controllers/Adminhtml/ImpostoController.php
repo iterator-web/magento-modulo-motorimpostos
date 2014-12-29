@@ -60,6 +60,134 @@ class Iterator_MotorImpostos_Adminhtml_ImpostoController extends Mage_Adminhtml_
         return $this;
     }
     
+    public function newAction() {
+        $this->_forward('edit');
+    }
+    
+    public function editAction() {
+        $impostoId  = $this->getRequest()->getParam('id');
+        $model = Mage::getModel('motorimpostos/imposto');
+     
+        if ($impostoId) {
+            $model->load($impostoId);   
+            if (!$model->getId()) {
+                Mage::getSingleton('adminhtml/session')->addError($this->__(utf8_encode('Esta Taxa/Imposto já não existe mais.')));
+                $this->_redirect('*/*/');    
+                return;
+            }  
+        }
+     
+        $this->_title($model->getId() ? $model->getCodigo() : $this->__('Novos Impostos por NCM'));
+     
+        $data = Mage::getSingleton('adminhtml/session')->getCfopData(true);
+        if (!empty($data)) {
+            $model->setData($data);
+        }  
+     
+        Mage::register('motorimpostos/imposto', $model);
+        
+        $this->_initAction()
+            ->_addBreadcrumb($impostoId ? $this->__('Editar Imposto por NCM') : $this->__('Novo Imposto por NCM'), $impostoId ? $this->__('Editar Imposto por NCM') : $this->__('Novo Imposto por NCM'))
+            ->_addContent($this->getLayout()->createBlock('motorimpostos/adminhtml_imposto_edit')->setData('action', $this->getUrl('*/*/save')))
+            ->_addLeft($this->getLayout()->createBlock('motorimpostos/adminhtml_imposto_edit_tabs'))
+            ->renderLayout();
+    }
+    
+    public function saveAction() {
+        $postData = $this->getRequest()->getPost();
+        if ($postData) {
+            $impostoRN = Mage::getModel('motorimpostos/impostoRN');
+            $model = Mage::getSingleton('motorimpostos/imposto');
+            $model->setData($postData);
+            
+            if (isset($postData['created_time']) && $postData['created_time']) {
+                $model->setUpdateTime(Mage::getModel('core/date')->gmtDate());
+            } else {
+                $model->setCreatedTime(Mage::getModel('core/date')->gmtDate());
+                $model->setUpdateTime(Mage::getModel('core/date')->gmtDate());
+            }
+            
+            try {
+                $estadosArray = $postData['imposto_uf']['value'];
+                if($postData['cfop']) {
+                    $ncmExiste = null;
+                    $cfopIds = $postData['cfop'];
+                    foreach($cfopIds as $cfopId) {
+                        $model->setImpostoId(null);
+                        $retorno = $impostoRN->salvar($model, $cfopId, $estadosArray, false);
+                        if(!$retorno) {
+                            $ncmExiste .= ' - '.$cfopId;
+                        }
+                    }
+                    if($ncmExiste) {
+                        Mage::getSingleton('adminhtml/session')->addSuccess($this->__(utf8_encode('Os impostos por NCM foram salvos com sucesso. Porém o NCM já existe e não pode ser salvo novamente nos CFOP '.$ncmExiste)));
+                    } else {
+                        Mage::getSingleton('adminhtml/session')->addSuccess($this->__('Os impostos por NCM foram salvos com sucesso para os CFOP selecionados.'));
+                    }
+                    $this->_redirect('*/*/');
+                    return;
+                } else {
+                    $retorno = $impostoRN->salvar($model, $model->getCfopId(), $estadosArray, true);
+                    if($retorno) {
+                        Mage::getSingleton('adminhtml/session')->addSuccess($this->__('Os impostos do NCM '.$model->getNcmCodigo().' foram salvos com sucesso.'));
+                    }
+                    if ($this->getRequest()->getParam('back')) {
+                        $this->_redirect('*/*/edit', array('id' => $model->getId()));
+                        return;
+                    }
+                    $this->_redirect('*/*/index', array('cfop' => $model->getCfopId()));
+                    return;
+                }
+            }
+            catch (Mage_Core_Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            }
+            catch (Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($this->__('Um erro ocorreu enquanto este Imposto era salvo.'));
+            }
+            Mage::getSingleton('adminhtml/session')->setCfopData($postData);
+            $this->_redirectReferer();
+        }
+    }
+    
+    public function deleteAction() {
+        $impostoId = (int) $this->getRequest()->getParam('id');
+        if ($impostoId) {
+            try {
+                $impostoModel = Mage::getModel('motorimpostos/imposto');
+                $impostoModel->load($impostoId)->delete();
+                Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__(utf8_encode('Taxas e Impostos do NCM '.$impostoModel->getNcmCodigo().' excluídos com sucesso.')));
+                $this->_redirect('*/*/');
+            } catch (Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+                $this->_redirect('*/*/edit', array('imposto_id' => $this->getRequest()->getParam('imposto_id')));
+            }
+        }
+        $this->_redirect('*/*/index', array('cfop' => $impostoModel->getCfopId()));
+    }
+    
+    public function massDeleteAction() {
+        $impostoIds = $this->getRequest()->getParam('imposto_id');
+        if (!is_array($impostoIds)) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('motorimpostos')->__('Por favor selecione o(s) Imposto(s).'));
+        } else {
+            try {
+                $impostoModel = Mage::getModel('motorimpostos/imposto');
+                foreach ($impostoIds as $impostoId) {
+                    $impostoModel->load($impostoId)->delete();
+                }
+                Mage::getSingleton('adminhtml/session')->addSuccess(
+                        Mage::helper('motorimpostos')->__(
+                                utf8_encode('Total de %d Taxas e Impostos do NCM '.$impostoModel->getNcmCodigo().' foram excluídos.'), count($impostoIds)
+                        )
+                );
+            } catch (Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            }
+        }
+        $this->_redirect('*/*/index', array('cfop' => $impostoModel->getCfopId()));
+    }
+    
     protected function _isAllowed() {
         return Mage::getSingleton('admin/session')->isAllowed('sales/motorimpostos');
     }
