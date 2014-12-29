@@ -54,7 +54,16 @@ class Iterator_MotorImpostos_Model_ImpostoRN extends Mage_Core_Model_Abstract {
         }
     }
     
-    public function getPrimeiroCfopId() {
+    public function getCfop($cfopId) {
+        $model = Mage::getModel('motorimpostos/cfop')->load($cfopId);
+        if($model->getCfopId()) {
+            return $model->getCfopId();
+        } else {
+            return $this->getPrimeiroCfopId();
+        }
+    }
+    
+    private function getPrimeiroCfopId() {
         $cfopFirstItem = Mage::getResourceModel('motorimpostos/cfop_collection')->getFirstItem();
         return $cfopFirstItem->getCfopId();
     }
