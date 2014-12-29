@@ -101,11 +101,11 @@ class Iterator_MotorImpostos_Adminhtml_CfopController extends Mage_Adminhtml_Con
             try {
                 $model->save();
                 
-                /*
-                 * TODO: Verificar o campo 'cfop_duplicar' se é diferente de null e diferente de 0.
-                 * Caso sim fazer o collection com filtro de todos as taxas e impostos definidas para o 
-                 * 'cfop_id' selecionado e duplicar para o 'cfop_id' que acabou de ser gerado.
-                 */
+                $cfopIdDuplicar = $postData['cfop_duplicar'];
+                if($cfopIdDuplicar != '0') {
+                    $cfopRN = Mage::getModel('motorimpostos/cfopRN');
+                    $cfopRN->duplicar($model->getCfopId(), $cfopIdDuplicar);
+                }
                 
                 Mage::getSingleton('adminhtml/session')->addSuccess($this->__('O CFOP foi salvo com sucesso.'));
                 if ($this->getRequest()->getParam('back')) {
