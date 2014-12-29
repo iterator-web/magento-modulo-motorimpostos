@@ -26,22 +26,12 @@
  * @license    O Produto é protegido por leis de direitos autorais, bem como outras leis de propriedade intelectual.
  */
 
-?>
+class Iterator_MotorImpostos_Model_ImpostoRN extends Mage_Core_Model_Abstract {
 
-<p class="switcher"><label for="cfop_switcher">Listar as taxas e impostos referentes ao CFOP:</label>
-<select name="cfop_switcher" id="cfop_switcher" onchange="return switchCfop(this);">
-<?php $listaCfop = $this->getListaCfop(); ?>
-<?php foreach ($listaCfop as $cfop): ?>
-    <option value="<?php echo $cfop->getCfopId() ?>"<?php if($cfop->getCfopId() == $this->getSelectedCfop()): ?> selected="selected"<?php endif; ?>><?php echo $cfop->getCodigo().' - '.$cfop->getNome() ?></option>
-<?php endforeach; ?>
-</select>
-</p>
-<script type="text/javascript">
-    function switchCfop(obj){
-        var cfopParam = obj.value ? 'cfop/'+obj.value + '/' : '';
-        if(obj.switchParams){
-            cfopParam+= obj.switchParams;
-        }
-        setLocation('<?php echo $this->getSwitchUrl() ?>'+cfopParam);
+    public function getPrimeiroCfopId() {
+        $cfopFirstItem = Mage::getResourceModel('motorimpostos/cfop_collection')->getFirstItem();
+        return $cfopFirstItem->getCfopId();
     }
-</script>
+}
+
+?>

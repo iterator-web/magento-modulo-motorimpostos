@@ -43,6 +43,7 @@ class Iterator_MotorImpostos_Block_Adminhtml_Imposto_Grid extends Mage_Adminhtml
      
     protected function _prepareCollection() {
         $collection = Mage::getResourceModel($this->_getCollectionClass());
+        $collection->addFieldToFilter('cfop_id', array('eq' => Mage::getSingleton('adminhtml/session')->getCfopId()));
         $this->setCollection($collection);
          
         return parent::_prepareCollection();

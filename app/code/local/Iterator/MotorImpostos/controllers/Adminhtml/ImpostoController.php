@@ -49,6 +49,13 @@ class Iterator_MotorImpostos_Adminhtml_ImpostoController extends Mage_Adminhtml_
             ->_title($this->__('Sales'))->_title($this->__('Taxas e Impostos'))
             ->_addBreadcrumb($this->__('Sales'), $this->__('Sales'))
             ->_addBreadcrumb($this->__('Taxas e Impostos'), $this->__('Motor de Impostos'));
+        
+        $impostoRN = Mage::getModel('motorimpostos/impostoRN');
+        $cfopId = $this->getRequest()->getParam('cfop');
+        if(!$cfopId) {
+            $cfopId = $impostoRN->getPrimeiroCfopId();
+        }
+        Mage::getSingleton('adminhtml/session')->setCfopId($cfopId);
          
         return $this;
     }

@@ -34,7 +34,16 @@ class Iterator_MotorImpostos_Block_Adminhtml_Cfopswitcher extends Mage_Adminhtml
     }
     
     public function getListaCfop() {
-        // TODO: Buscar Collection com todos os CFOP cadastrados e retornar ao final do método
+        $cfopCollection = Mage::getResourceModel('motorimpostos/cfop_collection');
+        return $cfopCollection;
+    }
+    
+    public function getSelectedCfop() {
+        return Mage::getSingleton('adminhtml/session')->getCfopId();
+    }
+    
+    public function getSwitchUrl() {
+        return Mage::helper('adminhtml')->getUrl('*/imposto/index/');
     }
 }
 ?>
