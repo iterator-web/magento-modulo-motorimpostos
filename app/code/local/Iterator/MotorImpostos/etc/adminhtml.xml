@@ -32,7 +32,7 @@
                         </iterator_motorimpostos_imposto>
                         <settings translate="title" module="motorimpostos">
                             <title><![CDATA[Op&ccedil;&otilde;es]]></title>
-                            <action><!-- TODO: Caminho system --></action>
+                            <action>adminhtml/system_config/edit/section/tax</action>
                             <sort_order>1</sort_order>
                         </settings>
                     </children>
@@ -64,24 +64,22 @@
                                 </children>
                             </motorimpostos>
                         </children>
-                    </sales>
-                    <!--      
+                    </sales> 
                     <system>
                         <children>
                             <config>
                                 <children>
-                                    <shipping>
+                                    <tax>
                                         <children>
-                                            <sigep>
-                                                <title>SIGEP</title>
-                                            </sigep>
+                                            <empresa>
+                                                <title>Detalhes da Empresa</title>
+                                            </empresa>
                                         </children>
-                                    </shipping>  
+                                    </tax>  
                                 </children>
                             </config>
                         </children>
                     </system>
-                    -->
                 </children>
             </admin>
         </resources>
