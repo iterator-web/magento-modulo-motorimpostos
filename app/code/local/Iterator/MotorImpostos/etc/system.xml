@@ -20,8 +20,6 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </tipoempresa>
-                    </fields>
-                    <fields>
                         <regimetributacao translate="label">
                             <label><![CDATA[Regime de Tributa&ccedil;&atilde;o]]></label>
                             <frontend_type>select</frontend_type>
@@ -31,6 +29,24 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </regimetributacao>
+                        <country_id translate="label">
+                            <label>Country</label>
+                            <frontend_type>select</frontend_type>
+                            <frontend_class>countries</frontend_class>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </country_id>
+                        <region_id translate="label">
+                            <label>Region/State</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </region_id>
                     </fields>
                 </empresa>
             </groups>
