@@ -74,7 +74,7 @@ class Iterator_MotorImpostos_Model_ImpostoRN extends Mage_Core_Model_Abstract {
             $imposto->setIcmsModBcSt(null);
         } else if($cstCsosn === '30' || $cstCsosn === '201' || $cstCsosn === '202' || $cstCsosn === '203') {
             $imposto->setIcmsModBc(null);
-        } else if($cstCsosn === '40' || $cstCsosn === '41' || cstCsosn === '50' || $cstCsosn === '60' || $cstCsosn === '101' || $cstCsosn === '102' || $cstCsosn === '103' || $cstCsosn === '300' || $cstCsosn === '400') {
+        } else if($cstCsosn === '40' || $cstCsosn === '41' || cstCsosn === '50' || $cstCsosn === '60' || $cstCsosn === '101' || $cstCsosn === '102' || $cstCsosn === '103' || $cstCsosn === '300' || $cstCsosn === '400' || $cstCsosn === '500') {
             $imposto->setIcmsModBc(null);
             $imposto->setIcmsModBcSt(null);
         } else if($cstCsosn === '10' || $cstCsosn === '70' || $cstCsosn === '90' || $cstCsosn === '900') {}

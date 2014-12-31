@@ -64,7 +64,7 @@ function exibirModBcSt(cstCsosn) {
         $("icms_mod_bc").setStyle({background:"none"});
         $("icms_mod_bc_st").disabled=false;
         $("icms_mod_bc_st").setStyle({backgroundColor:"#FFF"});
-    } else if(cstCsosn === '40' || cstCsosn === '41' || cstCsosn === '50' || cstCsosn === '60' || cstCsosn === '101' || cstCsosn === '102' || cstCsosn === '103' || cstCsosn === '300' || cstCsosn === '400') {
+    } else if(cstCsosn === '40' || cstCsosn === '41' || cstCsosn === '50' || cstCsosn === '60' || cstCsosn === '101' || cstCsosn === '102' || cstCsosn === '103' || cstCsosn === '300' || cstCsosn === '400' || cstCsosn === '500') {
         $("icms_mod_bc").value = "";
         $("icms_mod_bc").disabled=true;
         $("icms_mod_bc").setStyle({background:"none"});
