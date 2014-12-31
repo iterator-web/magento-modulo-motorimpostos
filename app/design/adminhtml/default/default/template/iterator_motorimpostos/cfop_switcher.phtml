@@ -1,0 +1,47 @@
+<?php
+ /**
+ * Iterator Sistemas Web
+ *
+ * NOTAS SOBRE LICENÇA
+ *
+ * Este arquivo de código-fonte está em vigência dentro dos termos da EULA.
+ * Ao fazer uso deste arquivo em seu produto, automaticamente você está 
+ * concordando com os termos do Contrato de Licença de Usuário Final(EULA)
+ * propostos pela empresa Iterator Sistemas Web.
+ *
+ * =================================================================
+ *                   MÓDULO DE MOTOR DE IMPOSTOS
+ * =================================================================
+ * Este produto foi desenvolvido para o Ecommerce Magento de forma a
+ * automatizar cálculos de impostos existentes em operações fiscais.
+ * Através deste módulo a loja virtual do contratante do serviço
+ * passará a conter diversos cálculos envolvendo documentos fiscais
+ * em operações de entradas e também de saídas de forma automática.
+ * =================================================================
+ *
+ * @category   Iterator
+ * @package    Iterator_MotorImpostos
+ * @author     Ricardo Auler Barrientos <contato@iterator.com.br>
+ * @copyright  Copyright (c) Iterator Sistemas Web - CNPJ: 19.717.703/0001-63
+ * @license    O Produto é protegido por leis de direitos autorais, bem como outras leis de propriedade intelectual.
+ */
+
+?>
+
+<p class="switcher"><label for="cfop_switcher">Listar as taxas e impostos referentes ao CFOP:</label>
+<select name="cfop_switcher" id="cfop_switcher" onchange="return switchCfop(this);">
+<?php $listaCfop = $this->getListaCfop(); ?>
+<?php foreach ($listaCfop as $cfop): ?>
+    <option value="<?php echo $cfop->getCfopId() ?>"<?php if($cfop->getCfopId() == $this->getSelectedCfop()): ?> selected="selected"<?php endif; ?>><?php echo $cfop->getCodigo().' - '.$cfop->getNome() ?></option>
+<?php endforeach; ?>
+</select>
+</p>
+<script type="text/javascript">
+    function switchCfop(obj){
+        var cfopParam = obj.value ? 'cfop/'+obj.value + '/' : '';
+        if(obj.switchParams){
+            cfopParam+= obj.switchParams;
+        }
+        setLocation('<?php echo $this->getSwitchUrl() ?>'+cfopParam);
+    }
+</script>

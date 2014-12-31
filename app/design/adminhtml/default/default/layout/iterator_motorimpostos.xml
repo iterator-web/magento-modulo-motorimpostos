@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_cfop_index>
+        <reference name="content">
+            <block type="motorimpostos/adminhtml_cfop" name="motorimpostos_cfop" ></block>
+        </reference>
+    </adminhtml_cfop_index>
+    <adminhtml_imposto_index>
+        <reference name="content">
+            <block type="motorimpostos/adminhtml_cfopswitcher" name="motorimpostos_cfopswitcher" ></block>
+            <block type="motorimpostos/adminhtml_imposto" name="motorimpostos_imposto" />
+        </reference>
+    </adminhtml_imposto_index>
+    <adminhtml_imposto_edit>
+        <update handle="editor"/>
+        <reference name="head">
+            <action method="addJs"><script>iterator/motor_impostos.js</script></action>
+        </reference>
+    </adminhtml_imposto_edit>
+</layout>

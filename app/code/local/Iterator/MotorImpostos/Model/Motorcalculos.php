@@ -1,0 +1,102 @@
+<?php
+ /**
+ * Iterator Sistemas Web
+ *
+ * NOTAS SOBRE LICENÇA
+ *
+ * Este arquivo de código-fonte está em vigência dentro dos termos da EULA.
+ * Ao fazer uso deste arquivo em seu produto, automaticamente você está 
+ * concordando com os termos do Contrato de Licença de Usuário Final(EULA)
+ * propostos pela empresa Iterator Sistemas Web.
+ *
+ * =================================================================
+ *                   MÓDULO DE MOTOR DE IMPOSTOS
+ * =================================================================
+ * Este produto foi desenvolvido para o Ecommerce Magento de forma a
+ * automatizar cálculos de impostos existentes em operações fiscais.
+ * Através deste módulo a loja virtual do contratante do serviço
+ * passará a conter diversos cálculos envolvendo documentos fiscais
+ * em operações de entradas e também de saídas de forma automática.
+ * =================================================================
+ *
+ * @category   Iterator
+ * @package    Iterator_MotorImpostos
+ * @author     Ricardo Auler Barrientos <contato@iterator.com.br>
+ * @copyright  Copyright (c) Iterator Sistemas Web - CNPJ: 19.717.703/0001-63
+ * @license    O Produto é protegido por leis de direitos autorais, bem como outras leis de propriedade intelectual.
+ */
+
+class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstract {
+    
+    public function entradaIcmsSt($entradaItem) {
+        $taxasImpostos = $this->getTaxasImpostos($entradaItem);
+        $ivaAjustado = $this->calcularIvaAjustado($taxasImpostos);
+        
+        $resultadoProdMaisIpi = $entradaItem->getValorTotal() + $entradaItem->getValorIpi();
+        $resultadoIvaVezesProdutoMaisIpi = $resultadoProdMaisIpi * ($ivaAjustado / 100);
+        $resultadoBaseIcmsSt = $resultadoIvaVezesProdutoMaisIpi + $resultadoProdMaisIpi;
+        $resultadoIcmsSt = (($resultadoBaseIcmsSt * ($taxasImpostos['aliquota_icms'] / 100)) - $entradaItem->getValorIcms());
+
+        return $resultadoIcmsSt;
+    }
+    
+    private function calcularIvaAjustado($taxasImpostos) {
+        $resultado = ((1+($taxasImpostos['mva_original']/100))*(1-($taxasImpostos['aliquota_interestadual']/100))/(1-($taxasImpostos['aliquota_icms']/100))-1);
+        $resultPorcentagem = round($resultado*100, 2);
+        return $resultPorcentagem;
+    }
+    
+    private function getTaxasImpostos($entradaItem) {
+        $taxasImpostos = array();
+        $ncm = $this->getProdutoNcm($entradaItem);
+        $estadoDestino = Mage::getStoreConfig('tax/empresa/region_id');
+        $fornecedorUf = $this->getFornecedorUf($entradaItem->getFornecedorId());
+        $cfop = Mage::getModel('motorimpostos/cfop')->load('2403', 'codigo');
+        if(!$cfop->getCfopId()) {
+            echo 'Para calcular corretamente os valores referentes a substituição tributária, '
+                    . 'é necessário criar o CFOP "2403 - Compra para comercialização em operação com mercadoria sujeita ao regime de substituição tributária".'; 
+            exit();
+        }
+        $impostoModel = $this->getImposto($cfop->getCfopId(), $ncm);
+        $impostoUfFornecedorModel = $this->getImpostoUf($impostoModel->getId(), $fornecedorUf);
+        $impostoUfEmpresaModel = $this->getImpostoUf($impostoModel->getId(), $estadoDestino);
+        
+        $taxasImpostos['aliquota_interestadual'] = $impostoModel->getAliquotaInterestadual();
+        $taxasImpostos['mva_original'] = $impostoUfFornecedorModel->getMvaOriginal();
+        $taxasImpostos['aliquota_icms'] = $impostoUfEmpresaModel->getAliquotaIcms();
+        
+        return $taxasImpostos;
+    }
+    
+    private function getProdutoNcm($entradaItem) {
+        $produtoId = preg_replace('/[^\d]/', '', $entradaItem->getProduto());
+        $produto = Mage::getModel('catalog/product')->load($produtoId);
+        $ncm = $produto->getResource()->getAttribute('ncm')->getFrontend()->getValue($produto);
+        return $ncm;
+    }
+    
+    private function getFornecedorUf($fornecedorId) {
+        $fornecedor = Mage::getModel('controleestoque/fornecedor')->load($fornecedorId);
+        return $fornecedor->getRegionId();
+    }
+    
+    private function getImposto($cfopCodigo, $ncm) {
+        $impostoModel = Mage::getModel('motorimpostos/imposto')->getCollection()
+                ->addFieldToFilter('cfop_id', $cfopCodigo)
+                ->addFieldToFilter('ncm_codigo', $ncm)
+                ->getFirstItem();
+        
+        return $impostoModel;
+    }
+    
+    private function getImpostoUf($impostoId, $regionId) {
+        $impostoUfModel = Mage::getModel('motorimpostos/impostouf')->getCollection()
+                ->addFieldToFilter('imposto_id', $impostoId)
+                ->addFieldToFilter('region_id', $regionId)
+                ->getFirstItem();
+        
+        return $impostoUfModel;
+    }
+}
+
+?>
