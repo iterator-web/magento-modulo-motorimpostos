@@ -171,7 +171,7 @@ class Iterator_MotorImpostos_Block_Adminhtml_Imposto_Edit_Tab_Form extends Mage_
             'disabled'  => true,
             'style'     => ("background:none"),
             'required'  => false,
-            'after_element_html' => utf8_encode('<p class="note">Modalidade de determinação da Base de Cálculo do ICMS.</p>')
+            'after_element_html' => utf8_encode('<p class="note">Modalidade de determinação da Base de Cálculo do ICMS ST.</p>')
         ));
         
         $fieldsetIpi = $form->addFieldset('base_fieldset_ipi', array(
@@ -200,7 +200,7 @@ class Iterator_MotorImpostos_Block_Adminhtml_Imposto_Edit_Tab_Form extends Mage_
                array('value' => 99, 'label' => utf8_encode('99 - Outras saídas')),
             ),
             'required'  => true,
-            'after_element_html' => utf8_encode('<p class="note">Origem da mercadoria.</p>')
+            'after_element_html' => utf8_encode('<p class="note">Código da situação tributária do IPI.</p>')
         ));
         
         $fieldsetPisCofins = $form->addFieldset('base_fieldset_piscofins', array(
@@ -249,6 +249,21 @@ class Iterator_MotorImpostos_Block_Adminhtml_Imposto_Edit_Tab_Form extends Mage_
             ),
             'required'  => true,
             'after_element_html' => utf8_encode('<p class="note">Código de Situação Tributária do PIS/COFINS.</p>')
+        ));
+        
+        $fieldsetTipi = $form->addFieldset('base_fieldset_tipi', array(
+            'legend'    => Mage::helper('motorimpostos')->__(utf8_encode('Informações da TIPI')),
+            'class'     => 'fieldset',
+        ));
+        
+        $fieldsetTipi->addField('ex_tipi', 'text', array(
+            'name'      => 'ex_tipi',
+            'label'     => utf8_encode('Código EX da TIPI'),
+            'title'     => utf8_encode('Código EX da TIPI'),
+            'maxlength' => '3',
+            'required'  => true,
+            'class'     => 'validate-number',
+            'after_element_html' => utf8_encode('<p class="note">Preencher de acordo com o código EX da TIPI.</p>')
         ));
      
         $form->setValues($model->getData());
