@@ -256,12 +256,16 @@ class Iterator_MotorImpostos_Block_Adminhtml_Imposto_Edit_Tab_Form extends Mage_
             'class'     => 'fieldset',
         ));
         
+        if($model->getExTipi() == '000') {
+            $model->setExTipi('');
+        }
+        
         $fieldsetTipi->addField('ex_tipi', 'text', array(
             'name'      => 'ex_tipi',
             'label'     => utf8_encode('Código EX da TIPI'),
             'title'     => utf8_encode('Código EX da TIPI'),
             'maxlength' => '3',
-            'required'  => true,
+            'required'  => false,
             'class'     => 'validate-number',
             'after_element_html' => utf8_encode('<p class="note">Preencher de acordo com o código EX da TIPI.</p>')
         ));
