@@ -72,6 +72,11 @@ class Iterator_MotorImpostos_Adminhtml_ImpostoController extends Mage_Adminhtml_
                 $this->_redirect('*/*/');    
                 return;
             }  
+        } else {
+            $modelSimples = Mage::getModel('motorimpostos/imposto')->getCollection()->getFirstItem();
+            if($modelSimples->getImpostoId()) {
+                $model->setAliquotaSimples($modelSimples->getAliquotaSimples());
+            }
         }
      
         $this->_title($model->getId() ? $model->getCodigo() : $this->__('Novos Impostos por NCM'));
@@ -143,6 +148,57 @@ class Iterator_MotorImpostos_Adminhtml_ImpostoController extends Mage_Adminhtml_
                 Mage::getSingleton('adminhtml/session')->addError($this->__('Um erro ocorreu enquanto este Imposto era salvo.'));
             }
             Mage::getSingleton('adminhtml/session')->setCfopData($postData);
+            $this->_redirectReferer();
+        }
+    }
+    
+    public function editAliquotaAction() {
+        $model = Mage::getModel('motorimpostos/imposto')->getCollection()->getFirstItem();
+        if(!$model->getImpostoId()) {
+            Mage::getSingleton('adminhtml/session')->addError($this->__(utf8_encode('É necessário cadastrar o(s) NCM antes de definir a Alíquota do Simples Nacional.')));
+            $this->_redirect('*/*/');    
+            return;
+        }
+     
+        $this->_title($model->getId() ? $model->getCodigo() : $this->__(utf8_encode('Gerenciar Alíquota - Simples Nacional')));
+     
+        $data = Mage::getSingleton('adminhtml/session')->getAliquotaSn(true);
+        if (!empty($data)) {
+            $model->setData($data);
+        }
+        Mage::register('aliquota_sn', $model);
+        
+        $this->_initAction()
+            ->_addBreadcrumb($this->__(utf8_encode('Gerenciar Alíquota - Simples Nacional')))
+            ->_addContent($this->getLayout()->createBlock('motorimpostos/adminhtml_imposto_simples')->setData('action', $this->getUrl('*/*/saveAliquota')))
+            ->renderLayout();
+    }
+    
+    public function saveAliquotaAction() {
+        $postData = $this->getRequest()->getPost();
+        if ($postData) {
+            $aliquotaSimples = $postData['aliquota_simples'];
+            try {
+                $impostoCollection = Mage::getModel('motorimpostos/imposto')->getCollection();
+                foreach($impostoCollection as $imposto) {
+                    $imposto->setAliquotaSimples($aliquotaSimples);
+                    $imposto->save();
+                }
+                Mage::getSingleton('adminhtml/session')->addSuccess($this->__(utf8_encode('Alíquota aplicável de cálculo do crédito ajustada com sucesso.')));
+                if ($this->getRequest()->getParam('back')) {
+                    $this->_redirect('*/*/editAliquota');
+                    return;
+                }
+                $this->_redirect('*/*/');
+                return;
+            }
+            catch (Mage_Core_Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            }
+            catch (Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($this->__('Um erro ocorreu enquanto este Imposto era salvo.'));
+            }
+            Mage::getSingleton('adminhtml/session')->setAliquotaSn($postData);
             $this->_redirectReferer();
         }
     }
