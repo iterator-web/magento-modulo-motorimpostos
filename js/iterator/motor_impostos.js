@@ -31,8 +31,8 @@ Event.observe(document, 'change', respondToChange);
 
 function respondToChange(event) {
     var elementId = event.element().id;
-    if(elementId === 'aliquota_ir' || elementId === 'aliquota_csll' || elementId === 'aliquota_interestadual' || elementId === 'aliquota_pis' || 
-            elementId === 'aliquota_cofins' || elementId === 'aliquota_ipi' || elementId === 'aliquota_ii' || elementId === 'aliquota_iss' || elementId === 'aliquota_simples') {
+    if(elementId === 'aliquota_ir' || elementId === 'aliquota_csll' || elementId === 'aliquota_interestadual' || elementId === 'aliquota_pis' || elementId === 'aliquota_cofins' || 
+            elementId === 'aliquota_ipi' || elementId === 'aliquota_ii' || elementId === 'aliquota_iss' || elementId === 'aliquota_simples' || elementId === 'aliquota_ibpt') {
         converterFloat(''+elementId+'', document.getElementById(''+elementId+'').value);
     }
     if(elementId === 'ncm_codigo') {

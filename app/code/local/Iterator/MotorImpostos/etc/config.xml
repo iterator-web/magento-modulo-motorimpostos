@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Iterator_MotorImpostos>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </Iterator_MotorImpostos>
     </modules>
     

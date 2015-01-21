@@ -107,6 +107,20 @@ class Iterator_MotorImpostos_Block_Adminhtml_Imposto_Edit_Tab_Aliquota extends M
             ));
         }
         
+        $fieldsetIbpt = $form->addFieldset('base_fieldset_ibpt', array(
+            'legend'    => utf8_encode('Informações do Total Aproximado das Alíquotas'),
+            'class'     => 'fieldset',
+        ));
+
+        $fieldsetIbpt->addField('aliquota_ibpt', 'text', array(
+            'name'      => 'aliquota_ibpt',
+            'label'     => utf8_encode('Total Aproximado das Alíquotas'),
+            'title'     => utf8_encode('Total Aproximado das Alíquotas'),
+            'required'  => false,
+            'class'     => 'validate-zero-or-greater',
+            'after_element_html' => utf8_encode('<p class="note">Total Aproximado das Alíquotas com base na tabela disponibilizada pelo IBPT.</p><p class="note">Este valor deve ser atualizado sempre que uma nova tabela for disponibilizada em: http://deolhonoimposto.ibpt.org.br/</p>')
+        ));
+        
         $form->setValues($model->getData());
         $this->setForm($form);
     }
