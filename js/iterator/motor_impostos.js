@@ -65,6 +65,16 @@ function exibirModBcSt(cstCsosn) {
         $("reducao_bc_st").value = "";
         $("reducao_bc_st").disabled=true;
         $("reducao_bc_st").setStyle({background:"none"});
+    } else if(cstCsosn === '10') {
+        $("icms_mod_bc").disabled=false;
+        $("icms_mod_bc").setStyle({backgroundColor:"#FFF"});
+        $("icms_mod_bc_st").disabled=false;
+        $("icms_mod_bc_st").setStyle({backgroundColor:"#FFF"});
+        $("reducao_bc").value = "";
+        $("reducao_bc").disabled=true;
+        $("reducao_bc").setStyle({background:"none"});
+        $("reducao_bc_st").disabled=false;
+        $("reducao_bc_st").setStyle({backgroundColor:"#FFF"});
     } else if(cstCsosn === '20') {
         $("icms_mod_bc").disabled=false;
         $("icms_mod_bc").setStyle({backgroundColor:"#FFF"});
@@ -101,7 +111,7 @@ function exibirModBcSt(cstCsosn) {
         $("reducao_bc_st").value = "";
         $("reducao_bc_st").disabled=true;
         $("reducao_bc_st").setStyle({background:"none"});
-    } else if(cstCsosn === '10' || cstCsosn === '70' || cstCsosn === '900') {
+    } else if(cstCsosn === '70' || cstCsosn === '900') {
         $("icms_mod_bc").disabled=false;
         $("icms_mod_bc").setStyle({backgroundColor:"#FFF"});
         $("icms_mod_bc_st").disabled=false;
