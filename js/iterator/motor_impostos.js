@@ -32,7 +32,8 @@ Event.observe(document, 'change', respondToChange);
 function respondToChange(event) {
     var elementId = event.element().id;
     if(elementId === 'aliquota_ir' || elementId === 'aliquota_csll' || elementId === 'aliquota_interestadual' || elementId === 'aliquota_pis' || elementId === 'aliquota_cofins' || 
-            elementId === 'aliquota_ipi' || elementId === 'aliquota_ii' || elementId === 'aliquota_iss' || elementId === 'aliquota_simples' || elementId === 'aliquota_ibpt' || elementId === 'reducao_bc') {
+            elementId === 'aliquota_ipi' || elementId === 'aliquota_ii' || elementId === 'aliquota_iss' || elementId === 'aliquota_simples' || elementId === 'aliquota_ibpt' 
+            || elementId === 'reducao_bc' || elementId === 'reducao_bc_st') {
         converterFloat(''+elementId+'', document.getElementById(''+elementId+'').value);
     }
     if(elementId === 'ncm_codigo') {
@@ -61,6 +62,9 @@ function exibirModBcSt(cstCsosn) {
         $("reducao_bc").value = "";
         $("reducao_bc").disabled=true;
         $("reducao_bc").setStyle({background:"none"});
+        $("reducao_bc_st").value = "";
+        $("reducao_bc_st").disabled=true;
+        $("reducao_bc_st").setStyle({background:"none"});
     } else if(cstCsosn === '20') {
         $("icms_mod_bc").disabled=false;
         $("icms_mod_bc").setStyle({backgroundColor:"#FFF"});
@@ -69,6 +73,9 @@ function exibirModBcSt(cstCsosn) {
         $("icms_mod_bc_st").setStyle({background:"none"});
         $("reducao_bc").disabled=false;
         $("reducao_bc").setStyle({backgroundColor:"#FFF"});
+        $("reducao_bc_st").value = "";
+        $("reducao_bc_st").disabled=true;
+        $("reducao_bc_st").setStyle({background:"none"});
     } else if(cstCsosn === '30' || cstCsosn === '201' || cstCsosn === '202' || cstCsosn === '203') {
         $("icms_mod_bc").value = "";
         $("icms_mod_bc").disabled=true;
@@ -78,6 +85,9 @@ function exibirModBcSt(cstCsosn) {
         $("reducao_bc").value = "";
         $("reducao_bc").disabled=true;
         $("reducao_bc").setStyle({background:"none"});
+        $("reducao_bc_st").value = "";
+        $("reducao_bc_st").disabled=true;
+        $("reducao_bc_st").setStyle({background:"none"});
     } else if(cstCsosn === '40' || cstCsosn === '41' || cstCsosn === '50' || cstCsosn === '60' || cstCsosn === '101' || cstCsosn === '102' || cstCsosn === '103' || cstCsosn === '300' || cstCsosn === '400' || cstCsosn === '500') {
         $("icms_mod_bc").value = "";
         $("icms_mod_bc").disabled=true;
@@ -88,7 +98,10 @@ function exibirModBcSt(cstCsosn) {
         $("reducao_bc").value = "";
         $("reducao_bc").disabled=true;
         $("reducao_bc").setStyle({background:"none"});
-    } else if(cstCsosn === '10' || cstCsosn === '70' || cstCsosn === '90' || cstCsosn === '900') {
+        $("reducao_bc_st").value = "";
+        $("reducao_bc_st").disabled=true;
+        $("reducao_bc_st").setStyle({background:"none"});
+    } else if(cstCsosn === '10' || cstCsosn === '70' || cstCsosn === '900') {
         $("icms_mod_bc").disabled=false;
         $("icms_mod_bc").setStyle({backgroundColor:"#FFF"});
         $("icms_mod_bc_st").disabled=false;
@@ -96,6 +109,18 @@ function exibirModBcSt(cstCsosn) {
         $("reducao_bc").value = "";
         $("reducao_bc").disabled=true;
         $("reducao_bc").setStyle({background:"none"});
+        $("reducao_bc_st").value = "";
+        $("reducao_bc_st").disabled=true;
+        $("reducao_bc_st").setStyle({background:"none"});
+    } else if(cstCsosn === '90') {
+        $("icms_mod_bc").disabled=false;
+        $("icms_mod_bc").setStyle({backgroundColor:"#FFF"});
+        $("icms_mod_bc_st").disabled=false;
+        $("icms_mod_bc_st").setStyle({backgroundColor:"#FFF"});
+        $("reducao_bc").disabled=false;
+        $("reducao_bc").setStyle({backgroundColor:"#FFF"});
+        $("reducao_bc_st").disabled=false;
+        $("reducao_bc_st").setStyle({backgroundColor:"#FFF"});
     }
 }
 

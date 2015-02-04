@@ -176,12 +176,22 @@ class Iterator_MotorImpostos_Block_Adminhtml_Imposto_Edit_Tab_Form extends Mage_
         
         $fieldsetIcms->addField('reducao_bc', 'text', array(
             'name'      => 'reducao_bc',
-            'label'     => utf8_encode('Percentual da Redução de BC'),
-            'title'     => utf8_encode('Percentual da Redução de BC'),
+            'label'     => utf8_encode('% da Redução de BC'),
+            'title'     => utf8_encode('% da Redução de BC'),
             'required'  => false,
             'style'     => ("background:none"),
             'class'     => 'validate-zero-or-greater',
             'after_element_html' => utf8_encode('<p class="note">Percentual da Redução da Base de Cálculo do ICMS.</p>')
+        ));
+        
+        $fieldsetIcms->addField('reducao_bc_st', 'text', array(
+            'name'      => 'reducao_bc_st',
+            'label'     => utf8_encode('% da Redução de BC ST'),
+            'title'     => utf8_encode('% da Redução de BC ST'),
+            'required'  => false,
+            'style'     => ("background:none"),
+            'class'     => 'validate-zero-or-greater',
+            'after_element_html' => utf8_encode('<p class="note">Percentual da Redução da Base de Cálculo do ICMS ST.</p>')
         ));
         
         $fieldsetIpi = $form->addFieldset('base_fieldset_ipi', array(
