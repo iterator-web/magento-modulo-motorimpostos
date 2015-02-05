@@ -111,7 +111,7 @@ function exibirModBcSt(cstCsosn) {
         $("reducao_bc_st").value = "";
         $("reducao_bc_st").disabled=true;
         $("reducao_bc_st").setStyle({background:"none"});
-    } else if(cstCsosn === '70' || cstCsosn === '900') {
+    } else if(cstCsosn === '900') {
         $("icms_mod_bc").disabled=false;
         $("icms_mod_bc").setStyle({backgroundColor:"#FFF"});
         $("icms_mod_bc_st").disabled=false;
@@ -122,7 +122,7 @@ function exibirModBcSt(cstCsosn) {
         $("reducao_bc_st").value = "";
         $("reducao_bc_st").disabled=true;
         $("reducao_bc_st").setStyle({background:"none"});
-    } else if(cstCsosn === '90') {
+    } else if(cstCsosn === '70' || cstCsosn === '90') {
         $("icms_mod_bc").disabled=false;
         $("icms_mod_bc").setStyle({backgroundColor:"#FFF"});
         $("icms_mod_bc_st").disabled=false;
