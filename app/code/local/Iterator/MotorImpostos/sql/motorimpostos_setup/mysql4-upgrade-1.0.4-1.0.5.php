@@ -31,6 +31,7 @@ $installer->startSetup();
 
 try {
 $installer->run("
+    ALTER TABLE {$this->getTable('motorimpostos/imposto')} CHANGE COLUMN `icms_cst` `icms_cst` INT(4) UNSIGNED NULL DEFAULT NULL;
     ALTER TABLE {$this->getTable('motorimpostos/imposto')} ADD COLUMN `reducao_bc_st` DOUBLE(7,4) UNSIGNED NULL AFTER `reducao_bc`;
 ");
 } catch (Exception $e) {

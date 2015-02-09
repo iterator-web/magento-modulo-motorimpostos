@@ -95,9 +95,8 @@ function exibirModBcSt(cstCsosn) {
         $("reducao_bc").value = "";
         $("reducao_bc").disabled=true;
         $("reducao_bc").setStyle({background:"none"});
-        $("reducao_bc_st").value = "";
-        $("reducao_bc_st").disabled=true;
-        $("reducao_bc_st").setStyle({background:"none"});
+        $("reducao_bc_st").disabled=false;
+        $("reducao_bc_st").setStyle({backgroundColor:"#FFF"});
     } else if(cstCsosn === '40' || cstCsosn === '41' || cstCsosn === '50' || cstCsosn === '60' || cstCsosn === '101' || cstCsosn === '102' || cstCsosn === '103' || cstCsosn === '300' || cstCsosn === '400' || cstCsosn === '500') {
         $("icms_mod_bc").value = "";
         $("icms_mod_bc").disabled=true;
@@ -111,18 +110,7 @@ function exibirModBcSt(cstCsosn) {
         $("reducao_bc_st").value = "";
         $("reducao_bc_st").disabled=true;
         $("reducao_bc_st").setStyle({background:"none"});
-    } else if(cstCsosn === '900') {
-        $("icms_mod_bc").disabled=false;
-        $("icms_mod_bc").setStyle({backgroundColor:"#FFF"});
-        $("icms_mod_bc_st").disabled=false;
-        $("icms_mod_bc_st").setStyle({backgroundColor:"#FFF"});
-        $("reducao_bc").value = "";
-        $("reducao_bc").disabled=true;
-        $("reducao_bc").setStyle({background:"none"});
-        $("reducao_bc_st").value = "";
-        $("reducao_bc_st").disabled=true;
-        $("reducao_bc_st").setStyle({background:"none"});
-    } else if(cstCsosn === '70' || cstCsosn === '90') {
+    } else if(cstCsosn === '70' || cstCsosn === '90' || cstCsosn === '900') {
         $("icms_mod_bc").disabled=false;
         $("icms_mod_bc").setStyle({backgroundColor:"#FFF"});
         $("icms_mod_bc_st").disabled=false;
