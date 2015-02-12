@@ -36,7 +36,23 @@ class Iterator_MotorImpostos_Block_Adminhtml_Imposto_Grid extends Mage_Adminhtml
         $this->setDefaultDir('desc');
         $this->setSaveParametersInSession(true);
     }
-     
+    
+    public function getMainButtonsHtml() {
+        $html = parent::getMainButtonsHtml();
+        $regimeTributacao = Mage::getStoreConfig('tax/empresa/regimetributacao');
+        if($regimeTributacao == 2) {
+            $addButton = $this->getLayout()->createBlock('adminhtml/widget_button')
+                ->setData(array(
+                    'label'     => Mage::helper('adminhtml')->__(utf8_encode('Gerenciar Alíquota - Simples Nacional')),
+                    'onclick'   => "setLocation('".$this->getUrl('*/*/editAliquota')."')",
+                    'class'   => 'task'
+                ))->toHtml();
+            return $addButton.$html;
+        } else {
+            return $html;
+        }
+    }
+
     protected function _getCollectionClass() {
         return 'motorimpostos/imposto_collection';
     }
@@ -91,68 +107,79 @@ class Iterator_MotorImpostos_Block_Adminhtml_Imposto_Grid extends Mage_Adminhtml
             )
         );
         
-        $this->addColumn('aliquota_ir',
-            array(
-                'header'=> $this->__('IR'),
-                'width'     => '100px',
-                'index' => 'aliquota_ir',
-                'filter_index' => 'aliquota_ir'
-            )
-        );
-        
-        $this->addColumn('aliquota_csll',
-            array(
-                'header'=> $this->__('CSLL'),
-                'width'     => '100px',
-                'index' => 'aliquota_csll',
-                'filter_index' => 'aliquota_csll'
-            )
-        );
-        
-        $this->addColumn('aliquota_pis',
-            array(
-                'header'=> $this->__('PIS'),
-                'width'     => '100px',
-                'index' => 'aliquota_pis',
-                'filter_index' => 'aliquota_pis'
-            )
-        );
-        
-        $this->addColumn('aliquota_cofins',
-            array(
-                'header'=> $this->__('COFINS'),
-                'width'     => '100px',
-                'index' => 'aliquota_cofins',
-                'filter_index' => 'aliquota_cofins'
-            )
-        );
-        
-        $this->addColumn('aliquota_ipi',
-            array(
-                'header'=> $this->__('IPI'),
-                'width'     => '100px',
-                'index' => 'aliquota_ipi',
-                'filter_index' => 'aliquota_ipi'
-            )
-        );
-        
-        $this->addColumn('aliquota_ii',
-            array(
-                'header'=> $this->__(utf8_encode('Imp. Importação')),
-                'width'     => '100px',
-                'index' => 'aliquota_ii',
-                'filter_index' => 'aliquota_ii'
-            )
-        );
-        
-        $this->addColumn('aliquota_iss',
-            array(
-                'header'=> $this->__('ISS'),
-                'width'     => '100px',
-                'index' => 'aliquota_iss',
-                'filter_index' => 'aliquota_iss'
-            )
-        );
+        $regimeTributacao = Mage::getStoreConfig('tax/empresa/regimetributacao');
+        if($regimeTributacao == 2) {
+            $this->addColumn('aliquota_simples',
+                array(
+                    'header'=> $this->__(utf8_encode('Alíquota aplicável de cálculo do crédito')),
+                    'index' => 'aliquota_simples',
+                    'filter_index' => 'aliquota_simples'
+                )
+            );
+        } else {
+            $this->addColumn('aliquota_ir',
+                array(
+                    'header'=> $this->__('IR'),
+                    'width'     => '100px',
+                    'index' => 'aliquota_ir',
+                    'filter_index' => 'aliquota_ir'
+                )
+            );
+
+            $this->addColumn('aliquota_csll',
+                array(
+                    'header'=> $this->__('CSLL'),
+                    'width'     => '100px',
+                    'index' => 'aliquota_csll',
+                    'filter_index' => 'aliquota_csll'
+                )
+            );
+
+            $this->addColumn('aliquota_pis',
+                array(
+                    'header'=> $this->__('PIS'),
+                    'width'     => '100px',
+                    'index' => 'aliquota_pis',
+                    'filter_index' => 'aliquota_pis'
+                )
+            );
+
+            $this->addColumn('aliquota_cofins',
+                array(
+                    'header'=> $this->__('COFINS'),
+                    'width'     => '100px',
+                    'index' => 'aliquota_cofins',
+                    'filter_index' => 'aliquota_cofins'
+                )
+            );
+
+            $this->addColumn('aliquota_ipi',
+                array(
+                    'header'=> $this->__('IPI'),
+                    'width'     => '100px',
+                    'index' => 'aliquota_ipi',
+                    'filter_index' => 'aliquota_ipi'
+                )
+            );
+
+            $this->addColumn('aliquota_ii',
+                array(
+                    'header'=> $this->__(utf8_encode('Imp. Importação')),
+                    'width'     => '100px',
+                    'index' => 'aliquota_ii',
+                    'filter_index' => 'aliquota_ii'
+                )
+            );
+
+            $this->addColumn('aliquota_iss',
+                array(
+                    'header'=> $this->__('ISS'),
+                    'width'     => '100px',
+                    'index' => 'aliquota_iss',
+                    'filter_index' => 'aliquota_iss'
+                )
+            );
+        }
         
         $this->addColumn('aliquota_interestadual',
             array(

@@ -17,4 +17,10 @@
             <action method="addJs"><script>iterator/motor_impostos.js</script></action>
         </reference>
     </adminhtml_imposto_edit>
+    <adminhtml_imposto_editaliquota>
+        <update handle="editor"/>
+        <reference name="head">
+            <action method="addJs"><script>iterator/motor_impostos.js</script></action>
+        </reference>
+    </adminhtml_imposto_editaliquota>
 </layout>
