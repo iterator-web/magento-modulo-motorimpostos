@@ -180,9 +180,9 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
         $nfeProdutoImposto->setProdutoId($nfeProdutoId);
         $nfeProdutoImposto->setTipoImposto('icms');
         $nfeProdutoImposto->setOrig($impostoModel->getIcmsOrigem());
-        $nfeProdutoImposto->setCst($cstCsosn);
         if($cstCsosn == '0') {
             // cst, modBC, vBC, pICMS, vICMS
+            $nfeProdutoImposto->setCst($cstCsosn);
             $produtoIpi = $this->getProdutoImposto($nfeProdutoId, 'ipi');
             $icmsVBC = $this->getBaseCalculoIcms($nfeProduto, $produtoIpi);
             $impostoUfEmitenteModel = $this->getImpostoUf($impostoModel->getImpostoId(), $estadoEmitente);
@@ -193,19 +193,20 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
             $nfeProdutoImposto->setVIcms($vICMS);
         } else if($cstCsosn == '10') {
             // cst, modBC, vBC, pICMS, vICMS, modBCST, pMVAST, pRedBCST, vBCST, pICMSST, vICMSST. pRedBC, pBCOp, UFST
+            $nfeProdutoImposto->setCst($cstCsosn);
             $produtoIpi = $this->getProdutoImposto($nfeProdutoId, 'ipi');
             $icmsVBC = $this->getBaseCalculoIcms($nfeProduto, $produtoIpi);
             $impostoUfEmitenteModel = $this->getImpostoUf($impostoModel->getImpostoId(), $estadoEmitente);
             $impostoUfDestinatarioModel = $this->getImpostoUf($impostoModel->getImpostoId(), $estadoDestinatario);
             $vICMS = ($icmsVBC * $impostoUfEmitenteModel->getAliquotaIcms()) / 100;
-            $ivaAjustado = $this->calcularIvaAjustado($impostoUfEmitenteModel->getMvaOriginal(), $impostoModel->getAliquotaInterestadual(), $impostoUfEmitenteModel->getAliquotaIcms());
+            $ivaAjustado = $this->calcularIvaAjustado($impostoUfEmitenteModel->getMvaOriginal(), $impostoModel->getAliquotaInterestadual(), $impostoUfDestinatarioModel->getAliquotaIcms());
             $reducaoBcSt = null;
             $temReducaoSt = false;
             if($impostoModel->getReducaoBcSt() > 0) {
                 $reducaoBcSt = $impostoModel->getReducaoBcSt();
                 $temReducaoSt = true;
             }
-            $icmsSt = $this->calcularSubstituicaoTributaria($icmsVBC, $produtoIpi, $ivaAjustado, $impostoUfEmitenteModel->getAliquotaIcms(), $vICMS, $temReducaoSt, $reducaoBcSt);
+            $icmsSt = $this->calcularSubstituicaoTributaria($icmsVBC, $produtoIpi, $ivaAjustado, $impostoUfDestinatarioModel->getAliquotaIcms(), $vICMS, $temReducaoSt, $reducaoBcSt);
             $nfeProdutoImposto->setModBc($impostoModel->getIcmsModBc());
             $nfeProdutoImposto->setVBc($icmsVBC);
             $nfeProdutoImposto->setPIcms($impostoUfEmitenteModel->getAliquotaIcms());
@@ -218,6 +219,7 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
             $nfeProdutoImposto->setVIcmsSt($icmsSt['valor']);
         } else if($cstCsosn == '20' || $cstCsosn == '51') {
             // cst, modBC, pRedBC, vBC, pICMS, vICMS
+            $nfeProdutoImposto->setCst($cstCsosn);
             $produtoIpi = $this->getProdutoImposto($nfeProdutoId, 'ipi');
             $icmsVBC = $this->getBaseCalculoIcms($nfeProduto, $produtoIpi);
             $reducaoBc = null;
@@ -234,20 +236,27 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
             $nfeProdutoImposto->setVIcms($vICMS);
             if($cstCsosn == '20') {
                 // vICMSDeson, motDesICMS
+                $nfeProdutoImposto->setCst($cstCsosn);
             } else if($cstCsosn == '51') {
                 // vICMSOp, pDif, vICMSDif
+                $nfeProdutoImposto->setCst($cstCsosn);
             }
         } else if($cstCsosn == '30') {
             // cst, modBCST, pMVAST, pRedBCST, vBCST, pICMSST, vICMSST, vICMSDeson, motDesICMS
+            $nfeProdutoImposto->setCst($cstCsosn);
         } else if($cstCsosn == '40' || $cstCsosn == '41' || $cstCsosn == '50') {
             // cst, vICMSDeson, motDesICMS
+            $nfeProdutoImposto->setCst($cstCsosn);
             if($cstCsosn == '41') {
                 // vBCSTRet, vICMSSTRet, vBCSTDest, vICMSSTDest
+                $nfeProdutoImposto->setCst($cstCsosn);
             }
         } else if($cstCsosn == '60') {
             // cst, vBCSTRet, vICMSSTRet
+            $nfeProdutoImposto->setCst($cstCsosn);
         } else if($cstCsosn == '70' || $cstCsosn == '90') {
             // cst, modBC, pRedBC, vBC, pICMS, vICMS, modBCST, pMVAST, pRedBCST, vBCST, pICMSST, vICMSST, vICMSDeson, motDesICMS
+            $nfeProdutoImposto->setCst($cstCsosn);
             $produtoIpi = $this->getProdutoImposto($nfeProdutoId, 'ipi');
             $icmsVBC = $this->getBaseCalculoIcms($nfeProduto, $produtoIpi);
             $reducaoBc = null;
@@ -258,14 +267,14 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
             $impostoUfEmitenteModel = $this->getImpostoUf($impostoModel->getImpostoId(), $estadoEmitente);
             $impostoUfDestinatarioModel = $this->getImpostoUf($impostoModel->getImpostoId(), $estadoDestinatario);
             $vICMS = ($icmsVBC * $impostoUfEmitenteModel->getAliquotaIcms()) / 100;
-            $ivaAjustado = $this->calcularIvaAjustado($impostoUfEmitenteModel->getMvaOriginal(), $impostoModel->getAliquotaInterestadual(), $impostoUfEmitenteModel->getAliquotaIcms());
+            $ivaAjustado = $this->calcularIvaAjustado($impostoUfEmitenteModel->getMvaOriginal(), $impostoModel->getAliquotaInterestadual(), $impostoUfDestinatarioModel->getAliquotaIcms());
             $reducaoBcSt = null;
             $temReducaoSt = false;
             if($impostoModel->getReducaoBcSt() > 0) {
                 $reducaoBcSt = $impostoModel->getReducaoBcSt();
                 $temReducaoSt = true;
             }
-            $icmsSt = $this->calcularSubstituicaoTributaria($icmsVBC, $produtoIpi, $ivaAjustado, $impostoUfEmitenteModel->getAliquotaIcms(), $vICMS, $temReducaoSt, $reducaoBcSt);
+            $icmsSt = $this->calcularSubstituicaoTributaria($icmsVBC, $produtoIpi, $ivaAjustado, $impostoUfDestinatarioModel->getAliquotaIcms(), $vICMS, $temReducaoSt, $reducaoBcSt);
             $nfeProdutoImposto->setModBc($impostoModel->getIcmsModBc());
             $nfeProdutoImposto->setPRedBc($reducaoBc);
             $nfeProdutoImposto->setVBc($icmsVBC);
@@ -279,9 +288,11 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
             $nfeProdutoImposto->setVIcmsSt($icmsSt['valor']);
             if($cstCsosn == '90') {
                 // pBCOp, UFST
+                $nfeProdutoImposto->setCst($cstCsosn);
             }
         } else if($cstCsosn == '101') {
             // cso_sn, pCredSN, vCredICMSSN
+            $nfeProdutoImposto->setCsoSn($cstCsosn);
             $produtoIpi = $this->getProdutoImposto($nfeProdutoId, 'ipi');
             $icmsVBC = $this->getBaseCalculoIcms($nfeProduto, $produtoIpi);
             $vCredICMSSN = ($icmsVBC * $impostoModel->getAliquotaSimples()) / 100;
@@ -289,21 +300,23 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
             $nfeProdutoImposto->setVCredIcmsSn($vCredICMSSN);
         } else if($cstCsosn == '102' || $cstCsosn == '103' || $cstCsosn == '300' || $cstCsosn == '400') {
             // cso_sn
+            $nfeProdutoImposto->setCsoSn($cstCsosn);
         } else if($cstCsosn == '201' || $cstCsosn == '202' || $cstCsosn == '203') {
             // cso_sn, modBCST, pMVAST, pRedBCST, vBCST, pICMSST, vICMSST
+            $nfeProdutoImposto->setCsoSn($cstCsosn);
             $produtoIpi = $this->getProdutoImposto($nfeProdutoId, 'ipi');
             $icmsVBC = $this->getBaseCalculoIcms($nfeProduto, $produtoIpi);
             $impostoUfEmitenteModel = $this->getImpostoUf($impostoModel->getImpostoId(), $estadoEmitente);
             $impostoUfDestinatarioModel = $this->getImpostoUf($impostoModel->getImpostoId(), $estadoDestinatario);
             $vICMS = ($icmsVBC * $impostoUfEmitenteModel->getAliquotaIcms()) / 100;
-            $ivaAjustado = $this->calcularIvaAjustado($impostoUfEmitenteModel->getMvaOriginal(), $impostoModel->getAliquotaInterestadual(), $impostoUfEmitenteModel->getAliquotaIcms());
+            $ivaAjustado = $this->calcularIvaAjustado($impostoUfEmitenteModel->getMvaOriginal(), $impostoModel->getAliquotaInterestadual(), $impostoUfDestinatarioModel->getAliquotaIcms());
             $reducaoBcSt = null;
             $temReducaoSt = false;
             if($impostoModel->getReducaoBcSt() > 0) {
                 $reducaoBcSt = $impostoModel->getReducaoBcSt();
                 $temReducaoSt = true;
             }
-            $icmsSt = $this->calcularSubstituicaoTributaria($icmsVBC, $produtoIpi, $ivaAjustado, $impostoUfEmitenteModel->getAliquotaIcms(), $vICMS, $temReducaoSt, $reducaoBcSt);
+            $icmsSt = $this->calcularSubstituicaoTributaria($icmsVBC, $produtoIpi, $ivaAjustado, $impostoUfDestinatarioModel->getAliquotaIcms(), $vICMS, $temReducaoSt, $reducaoBcSt);
             $nfeProdutoImposto->setModBcSt($impostoModel->getIcmsModBcSt());
             $nfeProdutoImposto->setPMvaSt($impostoUfEmitenteModel->getMvaOriginal());
             $nfeProdutoImposto->setPRedBcSt($reducaoBcSt);
@@ -312,14 +325,17 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
             $nfeProdutoImposto->setVIcmsSt($icmsSt['valor']);
             if($cstCsosn == '201') {
                 // pCredSN, vCrediICMSSN
+                $nfeProdutoImposto->setCsoSn($cstCsosn);
                 $vCredICMSSN = ($icmsVBC * $impostoModel->getAliquotaSimples()) / 100;
                 $nfeProdutoImposto->setPCredSn($impostoModel->getAliquotaSimples());
                 $nfeProdutoImposto->setVCredIcmsSn($vCredICMSSN);
             }
         } else if($cstCsosn == '500') {
             // cso_sn, vBCSTRet, vICMSSTRet
+            $nfeProdutoImposto->setCsoSn($cstCsosn);
         } else if($cstCsosn == '900') {
             // cso_sn, modBC, vBC, pRedBC, pICMS, vICMS, modBCST, pMVAST, pRedBCST, vBCST, pICMSST, vICMSST, pCredSN, vCrediICMSSN
+            $nfeProdutoImposto->setCsoSn($cstCsosn);
             $produtoIpi = $this->getProdutoImposto($nfeProdutoId, 'ipi');
             $icmsVBC = $this->getBaseCalculoIcms($nfeProduto, $produtoIpi);
             $reducaoBc = null;
@@ -331,14 +347,14 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
             $impostoUfDestinatarioModel = $this->getImpostoUf($impostoModel->getImpostoId(), $estadoDestinatario);
             $vCredICMSSN = ($icmsVBC * $impostoModel->getAliquotaSimples()) / 100;
             $vICMS = ($icmsVBC * $impostoUfEmitenteModel->getAliquotaIcms()) / 100;
-            $ivaAjustado = $this->calcularIvaAjustado($impostoUfEmitenteModel->getMvaOriginal(), $impostoModel->getAliquotaInterestadual(), $impostoUfEmitenteModel->getAliquotaIcms());
+            $ivaAjustado = $this->calcularIvaAjustado($impostoUfEmitenteModel->getMvaOriginal(), $impostoModel->getAliquotaInterestadual(), $impostoUfDestinatarioModel->getAliquotaIcms());
             $reducaoBcSt = null;
             $temReducaoSt = false;
             if($impostoModel->getReducaoBcSt() > 0) {
                 $reducaoBcSt = $impostoModel->getReducaoBcSt();
                 $temReducaoSt = true;
             }
-            $icmsSt = $this->calcularSubstituicaoTributaria($icmsVBC, $produtoIpi, $ivaAjustado, $impostoUfEmitenteModel->getAliquotaIcms(), $vICMS, $temReducaoSt, $reducaoBcSt);
+            $icmsSt = $this->calcularSubstituicaoTributaria($icmsVBC, $produtoIpi, $ivaAjustado, $impostoUfDestinatarioModel->getAliquotaIcms(), $vICMS, $temReducaoSt, $reducaoBcSt);
             $nfeProdutoImposto->setModBc($impostoModel->getIcmsModBc());
             $nfeProdutoImposto->setPRedBc($reducaoBc);
             $nfeProdutoImposto->setVBc($icmsVBC);
