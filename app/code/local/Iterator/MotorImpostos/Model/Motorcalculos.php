@@ -36,6 +36,13 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
         return $icmsSt['valor'];
     }
     
+    public function entradaIcmsDa($entradaItem, $valoresAdicionaisItem) {
+        $taxasImpostos = $this->getTaxasImpostos($entradaItem);
+        $valorDiferencial = (double)$taxasImpostos['aliquota_icms'] - (double)$taxasImpostos['aliquota_interestadual'];
+        $valorTotal = $entradaItem->getValorTotal() + $entradaItem->getValorIpi() + $valoresAdicionaisItem - $entradaItem->getDesconto();
+        return ($valorTotal * $valorDiferencial) / 100;
+    }
+    
     public function getDadosNcm($cfop, $ncm) {
         $cfop = Mage::getModel('motorimpostos/cfop')->load($cfop, 'codigo');
         if($cfop->getCfopId()) {
