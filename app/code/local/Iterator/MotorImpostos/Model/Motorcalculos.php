@@ -43,11 +43,11 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
         return ($valorTotal * $valorDiferencial) / 100;
     }
     
-    public function getDadosNcm($cfop, $ncm) {
+    public function getDadosNcm($cfop, $ncm, $origem) {
         $cfop = Mage::getModel('motorimpostos/cfop')->load($cfop, 'codigo');
         if($cfop->getCfopId()) {
             $impostoModel = Mage::getModel('motorimpostos/imposto')->getCollection()
-                ->addFieldToFilter('cfop_id', $cfop->getCfopId())->addFieldToFilter('ncm_codigo', $ncm)->getFirstItem();
+                ->addFieldToFilter('cfop_id', $cfop->getCfopId())->addFieldToFilter('ncm_codigo', $ncm)->addFieldToFilter('icms_origem', $origem)->getFirstItem();
             if(!$impostoModel->getExTipi() || $impostoModel->getExTipi() == '000') {
                 $impostoModel->setExTipi(null);
             }
@@ -95,6 +95,7 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
     private function getTaxasImpostos($entradaItem) {
         $taxasImpostos = array();
         $ncm = $this->getProdutoNcm($entradaItem);
+        $origem = $this->getProdutoOrigem($entradaItem);
         $estadoDestino = Mage::getStoreConfig('tax/empresa/region_id');
         $fornecedorUf = $this->getFornecedorUf($entradaItem->getFornecedorId());
         $cfop = Mage::getModel('motorimpostos/cfop')->load('2403', 'codigo');
@@ -103,7 +104,7 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
                     . 'é necessário criar o CFOP "2403 - Compra para comercialização em operação com mercadoria sujeita ao regime de substituição tributária".'; 
             exit();
         }
-        $impostoModel = $this->getImposto($cfop->getCfopId(), $ncm);
+        $impostoModel = $this->getImposto($cfop->getCfopId(), $ncm, $origem);
         $impostoUfFornecedorModel = $this->getImpostoUf($impostoModel->getId(), $fornecedorUf);
         $impostoUfEmpresaModel = $this->getImpostoUf($impostoModel->getId(), $estadoDestino);
         
@@ -121,15 +122,23 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
         return $ncm;
     }
     
+    private function getProdutoOrigem($entradaItem) {
+        $produtoId = preg_replace('/[^\d]/', '', $entradaItem->getProduto());
+        $produto = Mage::getModel('catalog/product')->load($produtoId);
+        $origem = substr($produto->getResource()->getAttribute('origem')->getFrontend()->getValue($produto),0,1);
+        return $origem;
+    }
+    
     private function getFornecedorUf($fornecedorId) {
         $fornecedor = Mage::getModel('controleestoque/fornecedor')->load($fornecedorId);
         return $fornecedor->getRegionId();
     }
     
-    private function getImposto($cfopCodigo, $ncm) {
+    private function getImposto($cfopCodigo, $ncm, $origem) {
         $impostoModel = Mage::getModel('motorimpostos/imposto')->getCollection()
                 ->addFieldToFilter('cfop_id', $cfopCodigo)
                 ->addFieldToFilter('ncm_codigo', $ncm)
+                ->addFieldToFilter('icms_origem', $origem)
                 ->getFirstItem();
         
         return $impostoModel;

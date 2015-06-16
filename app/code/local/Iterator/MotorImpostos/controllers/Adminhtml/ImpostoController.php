@@ -131,7 +131,9 @@ class Iterator_MotorImpostos_Adminhtml_ImpostoController extends Mage_Adminhtml_
                 } else {
                     $retorno = $impostoRN->salvar($model, $model->getCfopId(), $estadosArray, true);
                     if($retorno) {
-                        Mage::getSingleton('adminhtml/session')->addSuccess($this->__('Os impostos do NCM '.$model->getNcmCodigo().' foram salvos com sucesso.'));
+                        Mage::getSingleton('adminhtml/session')->addSuccess($this->__('O imposto do NCM '.$model->getNcmCodigo().' foi atualizado com sucesso.'));
+                    } else {
+                        Mage::getSingleton('adminhtml/session')->addError(utf8_encode($this->__('O imposto por NCM com esta origem já existe e não pode ser salvo novamente neste CFOP.')));
                     }
                     if ($this->getRequest()->getParam('back')) {
                         $this->_redirect('*/*/edit', array('id' => $model->getId()));

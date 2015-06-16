@@ -31,8 +31,12 @@ class Iterator_MotorImpostos_Model_ImpostoRN extends Mage_Core_Model_Abstract {
     public function salvar($imposto, $cfopId, $estadosArray, $update) {
         $impostos = Mage::getModel('motorimpostos/imposto')->getCollection()
                 ->addFieldToFilter('cfop_id', array('eq' => $cfopId))
-                ->addFieldToFilter('ncm_codigo', array('eq' => $imposto->getNcmCodigo()));
+                ->addFieldToFilter('ncm_codigo', array('eq' => $imposto->getNcmCodigo()))
+                ->addFieldToFilter('icms_origem', array('eq' => $imposto->getIcmsOrigem()));
+        $impostoModel = Mage::getModel('motorimpostos/imposto')->load($imposto->getId());
         if($impostos->getSize() > 0 && !$update) {
+            return false;
+        } else if($impostos->getSize() > 0 && $update && $imposto->getNcmCodigo() != $impostoModel->getNcmCodigo() || $impostos->getSize() > 0 && $update && $imposto->getIcmsOrigem() != $impostoModel->getIcmsOrigem()) {
             return false;
         } else {
             $this->setBcIcms($imposto);
