@@ -154,6 +154,7 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
     }
     
     private function setProdutoIpi($impostoModel, $nfeProduto, $impostosRetorno) {
+        $regimeTributacao = Mage::getStoreConfig('tax/empresa/regimetributacao');
         $nfeProdutoId = $nfeProduto->getProdutoId();
         $ipiCst = $impostoModel->getIpiCst();
         $nfeProdutoImposto = Mage::getModel('nfe/nfeprodutoimposto');
@@ -161,18 +162,20 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
         $nfeProdutoImposto->setTipoImposto('ipi');
         $nfeProdutoImposto->setCEnq('999');
         $nfeProdutoImposto->setCst($ipiCst);
-        if($ipiCst == '0' || $ipiCst == '49' || $ipiCst == '50' || $ipiCst == '99') {
-            // cst, vBC, pIPI, qUnid, vUnid, vIPI
-            $ipiVBC = $this->getBaseCalculoIpi($nfeProduto);
-            $pIPI = $impostoModel->getAliquotaIpi();
-            $vIPI = ($ipiVBC * $pIPI) / 100;
-            $nfeProdutoImposto->setVBc($ipiVBC);
-            $nfeProdutoImposto->setPIpi($pIPI);
-            $nfeProdutoImposto->setVIpi($vIPI);
-        } /* else if($ipiCst == '1' || $ipiCst == '2' || $ipiCst == '3' || $ipiCst == '4' || $ipiCst == '5' || 
-                $ipiCst == '51' || $ipiCst == '52' || $ipiCst == '53' || $ipiCst == '54' || $ipiCst == '55') {
-            // cst
-        } */
+        if($regimeTributacao != '2') {
+            if($ipiCst == '0' || $ipiCst == '49' || $ipiCst == '50' || $ipiCst == '99') {
+                // cst, vBC, pIPI, qUnid, vUnid, vIPI
+                $ipiVBC = $this->getBaseCalculoIpi($nfeProduto);
+                $pIPI = $impostoModel->getAliquotaIpi();
+                $vIPI = ($ipiVBC * $pIPI) / 100;
+                $nfeProdutoImposto->setVBc($ipiVBC);
+                $nfeProdutoImposto->setPIpi($pIPI);
+                $nfeProdutoImposto->setVIpi($vIPI);
+            } /* else if($ipiCst == '1' || $ipiCst == '2' || $ipiCst == '3' || $ipiCst == '4' || $ipiCst == '5' || 
+                    $ipiCst == '51' || $ipiCst == '52' || $ipiCst == '53' || $ipiCst == '54' || $ipiCst == '55') {
+                // cst
+            } */
+        }
         $nfeProdutoImposto->save();
         
         $impostosRetorno['vIPI'] = $vIPI;
