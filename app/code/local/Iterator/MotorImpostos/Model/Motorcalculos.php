@@ -218,7 +218,10 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
             $impostoUfEmitenteModel = $this->getImpostoUf($impostoModel->getImpostoId(), $estadoEmitente);
             $impostoUfDestinatarioModel = $this->getImpostoUf($impostoModel->getImpostoId(), $estadoDestinatario);
             $vICMS = ($icmsVBC * $impostoUfEmitenteModel->getAliquotaIcms()) / 100;
-            $ivaAjustado = $this->calcularIvaAjustado($impostoUfEmitenteModel->getMvaOriginal(), $impostoModel->getAliquotaInterestadual(), $impostoUfDestinatarioModel->getAliquotaIcms());
+            $ivaAjustado = $impostoUfEmitenteModel->getMvaOriginal();
+            if($estadoEmitente != $estadoDestinatario) {
+                $ivaAjustado = $this->calcularIvaAjustado($impostoUfEmitenteModel->getMvaOriginal(), $impostoModel->getAliquotaInterestadual(), $impostoUfDestinatarioModel->getAliquotaIcms());
+            }
             $reducaoBcSt = null;
             $temReducaoSt = false;
             if($impostoModel->getReducaoBcSt() > 0) {
@@ -286,7 +289,10 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
             $impostoUfEmitenteModel = $this->getImpostoUf($impostoModel->getImpostoId(), $estadoEmitente);
             $impostoUfDestinatarioModel = $this->getImpostoUf($impostoModel->getImpostoId(), $estadoDestinatario);
             $vICMS = ($icmsVBC * $impostoUfEmitenteModel->getAliquotaIcms()) / 100;
-            $ivaAjustado = $this->calcularIvaAjustado($impostoUfEmitenteModel->getMvaOriginal(), $impostoModel->getAliquotaInterestadual(), $impostoUfDestinatarioModel->getAliquotaIcms());
+            $ivaAjustado = $impostoUfEmitenteModel->getMvaOriginal();
+            if($estadoEmitente != $estadoDestinatario) {
+                $ivaAjustado = $this->calcularIvaAjustado($impostoUfEmitenteModel->getMvaOriginal(), $impostoModel->getAliquotaInterestadual(), $impostoUfDestinatarioModel->getAliquotaIcms());
+            }
             $reducaoBcSt = null;
             $temReducaoSt = false;
             if($impostoModel->getReducaoBcSt() > 0) {
@@ -328,7 +334,10 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
             $impostoUfEmitenteModel = $this->getImpostoUf($impostoModel->getImpostoId(), $estadoEmitente);
             $impostoUfDestinatarioModel = $this->getImpostoUf($impostoModel->getImpostoId(), $estadoDestinatario);
             $vICMS = ($icmsVBC * $impostoUfEmitenteModel->getAliquotaIcms()) / 100;
-            $ivaAjustado = $this->calcularIvaAjustado($impostoUfEmitenteModel->getMvaOriginal(), $impostoModel->getAliquotaInterestadual(), $impostoUfDestinatarioModel->getAliquotaIcms());
+            $ivaAjustado = $impostoUfEmitenteModel->getMvaOriginal();
+            if($estadoEmitente != $estadoDestinatario) {
+                $ivaAjustado = $this->calcularIvaAjustado($impostoUfEmitenteModel->getMvaOriginal(), $impostoModel->getAliquotaInterestadual(), $impostoUfDestinatarioModel->getAliquotaIcms());
+            }
             $reducaoBcSt = null;
             $temReducaoSt = false;
             if($impostoModel->getReducaoBcSt() > 0) {
@@ -366,7 +375,10 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
             $impostoUfDestinatarioModel = $this->getImpostoUf($impostoModel->getImpostoId(), $estadoDestinatario);
             $vCredICMSSN = ($icmsVBC * $impostoModel->getAliquotaSimples()) / 100;
             $vICMS = ($icmsVBC * $impostoUfEmitenteModel->getAliquotaIcms()) / 100;
-            $ivaAjustado = $this->calcularIvaAjustado($impostoUfEmitenteModel->getMvaOriginal(), $impostoModel->getAliquotaInterestadual(), $impostoUfDestinatarioModel->getAliquotaIcms());
+            $ivaAjustado = $impostoUfEmitenteModel->getMvaOriginal();
+            if($estadoEmitente != $estadoDestinatario) {
+                $ivaAjustado = $this->calcularIvaAjustado($impostoUfEmitenteModel->getMvaOriginal(), $impostoModel->getAliquotaInterestadual(), $impostoUfDestinatarioModel->getAliquotaIcms());
+            }
             $reducaoBcSt = null;
             $temReducaoSt = false;
             if($impostoModel->getReducaoBcSt() > 0) {
