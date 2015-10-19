@@ -223,6 +223,16 @@ class Iterator_MotorImpostos_Block_Adminhtml_Imposto_Edit_Tab_Form extends Mage_
             'after_element_html' => utf8_encode('<p class="note">Código da situação tributária do IPI.</p>')
         ));
         
+        $fieldsetIpi->addField('ipi_c_enq', 'text', array(
+            'name'      => 'ipi_c_enq',
+            'label'     => utf8_encode('Código de Enquadramento'),
+            'title'     => utf8_encode('Código de Enquadramento'),
+            'maxlength' => '3',
+            'required'  => true,
+            'class'     => 'validate-number',
+            'after_element_html' => utf8_encode('<p class="note">Preencher de acordo com a tabela de "Código de Enquadramento Legal do IPI".</p>')
+        ));
+        
         $fieldsetPisCofins = $form->addFieldset('base_fieldset_piscofins', array(
             'legend'    => Mage::helper('motorimpostos')->__(utf8_encode('Informações de PIS/COFINS')),
             'class'     => 'fieldset',

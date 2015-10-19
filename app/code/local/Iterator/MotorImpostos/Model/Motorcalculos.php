@@ -157,10 +157,11 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
         $regimeTributacao = Mage::getStoreConfig('tax/empresa/regimetributacao');
         $nfeProdutoId = $nfeProduto->getProdutoId();
         $ipiCst = $impostoModel->getIpiCst();
+        $ipiCEnq = $impostoModel->getIpi_c_enq();
         $nfeProdutoImposto = Mage::getModel('nfe/nfeprodutoimposto');
         $nfeProdutoImposto->setProdutoId($nfeProdutoId);
         $nfeProdutoImposto->setTipoImposto('ipi');
-        $nfeProdutoImposto->setCEnq('999');
+        $nfeProdutoImposto->setCEnq($ipiCEnq);
         $nfeProdutoImposto->setCst($ipiCst);
         if($regimeTributacao != '2') {
             if($ipiCst == '0' || $ipiCst == '49' || $ipiCst == '50' || $ipiCst == '99') {
