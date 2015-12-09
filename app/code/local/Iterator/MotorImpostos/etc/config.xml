@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Iterator_MotorImpostos>
-            <version>1.0.6</version>
+            <version>1.0.7</version>
         </Iterator_MotorImpostos>
     </modules>
     
@@ -56,6 +56,9 @@
                     <impostouf>
                         <table>iterator_motorimpostos_imposto_uf</table>
                     </impostouf>
+                    <cest>
+                        <table>iterator_motorimpostos_cest</table>
+                    </cest>
                 </entities>
             </motorimpostos_mysql4>
         </models>

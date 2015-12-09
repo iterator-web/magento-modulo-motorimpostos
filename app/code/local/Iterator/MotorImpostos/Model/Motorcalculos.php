@@ -55,6 +55,11 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
         return $impostoModel;
     }
     
+    public function getDadosCest($ncm) {
+        $cestModel = Mage::getModel('motorimpostos/cest')->getCollection()->addFieldToFilter('ncm_codigo', $ncm)->getFirstItem();
+        return $cestModel;
+    }
+    
     public function impostosAproximados($impostoModel, $vProd) {
         $aliquotaIbpt = $impostoModel->getAliquotaIbpt();
         $vTotTrib = ($vProd * $aliquotaIbpt) / 100;
