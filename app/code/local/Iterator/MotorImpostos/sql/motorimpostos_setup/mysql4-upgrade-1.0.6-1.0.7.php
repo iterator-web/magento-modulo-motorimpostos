@@ -33,7 +33,7 @@ try {
 $installer->run("
   CREATE  TABLE IF NOT EXISTS `{$installer->getTable('motorimpostos/cest')}` (
     `cest_id` INT(12) UNSIGNED NOT NULL AUTO_INCREMENT,
-    `cest_codigo` INT(7) UNSIGNED NOT NULL,
+    `cest_codigo` INT(7) UNSIGNED ZEROFILL NOT NULL,
     `ncm_codigo` INT(8) UNSIGNED NOT NULL,
     `descricao` TEXT NOT NULL,
     PRIMARY KEY (`cest_id`))
