@@ -2,5 +2,6 @@
 /app/design/adminhtml/default/default/layout/iterator_motorimpostos.xml /app/design/adminhtml/default/default/layout/iterator_motorimpostos.xml
 /app/design/adminhtml/default/default/template/iterator_motorimpostos/cfop_switcher.phtml /app/design/adminhtml/default/default/template/iterator_motorimpostos/cfop_switcher.phtml
 /app/design/adminhtml/default/default/template/iterator_motorimpostos/imposto_uf.phtml /app/design/adminhtml/default/default/template/iterator_motorimpostos/imposto_uf.phtml
+/app/design/adminhtml/default/default/template/iterator_motorimpostos/padrao_uf.phtml /app/design/adminhtml/default/default/template/iterator_motorimpostos/padrao_uf.phtml
 /app/etc/modules/Iterator_MotorImpostos.xml /app/etc/modules/Iterator_MotorImpostos.xml
 /js/iterator/motor_impostos.js /js/iterator/motor_impostos.js

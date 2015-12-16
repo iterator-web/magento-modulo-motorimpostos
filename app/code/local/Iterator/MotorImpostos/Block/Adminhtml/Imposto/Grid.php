@@ -40,16 +40,23 @@ class Iterator_MotorImpostos_Block_Adminhtml_Imposto_Grid extends Mage_Adminhtml
     public function getMainButtonsHtml() {
         $html = parent::getMainButtonsHtml();
         $regimeTributacao = Mage::getStoreConfig('tax/empresa/regimetributacao');
+        $addButtonUf = $this->getLayout()->createBlock('adminhtml/widget_button')
+                ->setData(array(
+                    'label'   => Mage::helper('adminhtml')->__(utf8_encode('Gerenciar Impostos Por UF')),
+                    'onclick' => "setLocation('".$this->getUrl('*/*/editPadraoUf')."')",
+                    'class'   => 'task'
+                ))->toHtml();
+        $addButtonUf.$html;
         if($regimeTributacao == 2) {
             $addButton = $this->getLayout()->createBlock('adminhtml/widget_button')
                 ->setData(array(
-                    'label'     => Mage::helper('adminhtml')->__(utf8_encode('Gerenciar Alíquota - Simples Nacional')),
-                    'onclick'   => "setLocation('".$this->getUrl('*/*/editAliquota')."')",
+                    'label'   => Mage::helper('adminhtml')->__(utf8_encode('Gerenciar Alíquota - Simples Nacional')),
+                    'onclick' => "setLocation('".$this->getUrl('*/*/editAliquota')."')",
                     'class'   => 'task'
                 ))->toHtml();
-            return $addButton.$html;
+            return $addButtonUf.$addButton.$html;
         } else {
-            return $html;
+            return $addButtonUf.$html;
         }
     }
 
@@ -103,6 +110,20 @@ class Iterator_MotorImpostos_Block_Adminhtml_Imposto_Grid extends Mage_Adminhtml
                     6 => 'Estrangeira - Imp. Direta - Sem Similar',
                     7 => 'Estrangeira - Merc. Interno - Sem Similar',
                     8 => 'Nacional - Imp. Sup. 70%'
+                ),
+            )
+        );
+        
+        $this->addColumn('contribuinte_codigo',
+            array(
+                'header' => $this->__('Para Contribuintes'),
+                'width'     => '100px',
+                'index' => 'contribuinte_codigo',
+                'filter_index' => 'contribuinte_codigo',
+                'type'      => 'options',
+                'options'   => array(
+                    1 => 'Sim',
+                    9 => utf8_encode('Não')
                 ),
             )
         );

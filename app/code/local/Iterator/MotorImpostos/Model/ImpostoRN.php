@@ -32,11 +32,14 @@ class Iterator_MotorImpostos_Model_ImpostoRN extends Mage_Core_Model_Abstract {
         $impostos = Mage::getModel('motorimpostos/imposto')->getCollection()
                 ->addFieldToFilter('cfop_id', array('eq' => $cfopId))
                 ->addFieldToFilter('ncm_codigo', array('eq' => $imposto->getNcmCodigo()))
-                ->addFieldToFilter('icms_origem', array('eq' => $imposto->getIcmsOrigem()));
+                ->addFieldToFilter('icms_origem', array('eq' => $imposto->getIcmsOrigem()))
+                ->addFieldToFilter('contribuinte_codigo', array('eq' => $imposto->getContribuinteCodigo()));
         $impostoModel = Mage::getModel('motorimpostos/imposto')->load($imposto->getId());
         if($impostos->getSize() > 0 && !$update) {
             return false;
-        } else if($impostos->getSize() > 0 && $update && $imposto->getNcmCodigo() != $impostoModel->getNcmCodigo() || $impostos->getSize() > 0 && $update && $imposto->getIcmsOrigem() != $impostoModel->getIcmsOrigem()) {
+        } else if($impostos->getSize() > 0 && $update && $imposto->getNcmCodigo() != $impostoModel->getNcmCodigo() || 
+                    $impostos->getSize() > 0 && $update && $imposto->getIcmsOrigem() != $impostoModel->getIcmsOrigem() ||
+                    $impostos->getSize() > 0 && $update && $imposto->getContribuinteCodigo() != $impostoModel->getContribuinteCodigo()) {
             return false;
         } else {
             $this->setBcIcms($imposto);
@@ -51,6 +54,8 @@ class Iterator_MotorImpostos_Model_ImpostoRN extends Mage_Core_Model_Abstract {
                 $impostoUf->setImpostoId($imposto->getImpostoId());
                 $impostoUf->setRegionId($estadosArray['option_'.$i]['region_id']);
                 $impostoUf->setAliquotaIcms($estadosArray['option_'.$i]['aliquota_icms']);
+                $impostoUf->setAliquotaInterestadual($estadosArray['option_'.$i]['aliquota_interestadual']);
+                $impostoUf->setAliquotaFcp($estadosArray['option_'.$i]['aliquota_fcp']);
                 $impostoUf->setMvaOriginal($estadosArray['option_'.$i]['mva_original']);
                 $impostoUf->save();
             }

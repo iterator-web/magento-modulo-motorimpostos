@@ -133,7 +133,7 @@ class Iterator_MotorImpostos_Adminhtml_ImpostoController extends Mage_Adminhtml_
                     if($retorno) {
                         Mage::getSingleton('adminhtml/session')->addSuccess($this->__('O imposto do NCM '.$model->getNcmCodigo().' foi atualizado com sucesso.'));
                     } else {
-                        Mage::getSingleton('adminhtml/session')->addError(utf8_encode($this->__('O imposto por NCM com esta origem já existe e não pode ser salvo novamente neste CFOP.')));
+                        Mage::getSingleton('adminhtml/session')->addError(utf8_encode($this->__('O imposto por NCM com esta origem e definição de contribuinte, já existe e não pode ser salvo novamente neste CFOP.')));
                     }
                     if ($this->getRequest()->getParam('back')) {
                         $this->_redirect('*/*/edit', array('id' => $model->getId()));
@@ -203,6 +203,55 @@ class Iterator_MotorImpostos_Adminhtml_ImpostoController extends Mage_Adminhtml_
             Mage::getSingleton('adminhtml/session')->setAliquotaSn($postData);
             $this->_redirectReferer();
         }
+    }
+    
+    public function editPadraoUfAction() {
+        $model = Mage::getModel('motorimpostos/impostoufpadrao');
+        $this->_title($model->getId() ? $model->getCodigo() : $this->__(utf8_encode('Gerenciar Impostos por UF')));
+     
+        $data = Mage::getSingleton('adminhtml/session')->getAliquotaSn(true);
+        if (!empty($data)) {
+            $model->setData($data);
+        }
+        Mage::register('impostos_uf', $model);
+        
+        $this->_initAction()
+            ->_addBreadcrumb($this->__(utf8_encode('Gerenciar Impostos Por UF')))
+            ->_addContent($this->getLayout()->createBlock('motorimpostos/adminhtml_imposto_padraouf')->setData('action', $this->getUrl('*/*/savePadraoUf')))
+            ->renderLayout();
+    }
+    
+    public function savePadraoUfAction() {
+        $postData = $this->getRequest()->getPost();
+        if ($postData) {
+            try {
+                $estadosArray = $postData['imposto_uf']['value'];
+                for($i=0; $i<count($estadosArray); $i++) {
+                    $impostoUfPadrao = Mage::getModel('motorimpostos/impostoufpadrao')->getCollection()
+                            ->addFieldToFilter('region_id', array('eq' => $estadosArray['option_'.$i]['region_id']))
+                            ->getFirstItem();
+                    $impostoUfPadrao->setRegionId($estadosArray['option_'.$i]['region_id']);
+                    $impostoUfPadrao->setAliquotaIcms($estadosArray['option_'.$i]['aliquota_icms']);
+                    $impostoUfPadrao->setAliquotaInterestadual($estadosArray['option_'.$i]['aliquota_interestadual']);
+                    $impostoUfPadrao->setAliquotaFcp($estadosArray['option_'.$i]['aliquota_fcp']);
+                    $impostoUfPadrao->save();
+                }
+                Mage::getSingleton('adminhtml/session')->addSuccess($this->__(utf8_encode('Impostos por UF definidos com sucesso.')));
+                if ($this->getRequest()->getParam('back')) {
+                    $this->_redirect('*/*/editPadraoUf');
+                    return;
+                }
+                $this->_redirect('*/*/');
+                return;
+            } catch (Mage_Core_Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+                var_dump($e->getMessage());
+            }
+            catch (Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($this->__('Um erro ocorreu enquanto este Imposto era salvo.'));
+                var_dump($e->getMessage());
+            }
+        } 
     }
     
     public function deleteAction() {

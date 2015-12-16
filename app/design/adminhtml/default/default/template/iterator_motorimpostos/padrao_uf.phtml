@@ -30,10 +30,8 @@ $_htmlId      = $this->getElement()->getHtmlId();
 $_htmlClass   = $this->getElement()->getClass();
 $_htmlName    = $this->getElement()->getName();
 $_readonly    = $this->getElement()->getReadonly();
-$impostoId = Mage::registry('motorimpostos/imposto')->getId();
-if($impostoId) {
-    $collection = Mage::getResourceModel('motorimpostos/impostouf_collection')->addFieldToFilter('imposto_id', $impostoId);
-} else {
+$collection = Mage::getResourceModel('motorimpostos/impostoufpadrao_collection');
+if($collection->getSize() <= 0) {
     $collection = Mage::getModel('directory/region')->getResourceCollection()->addCountryFilter('BR')->load();
 }
 $_counter = 0;
@@ -41,31 +39,26 @@ $_counter = 0;
 
 <tr>
     <td class="label"><?php echo $this->getElement()->getLabel() ?></td>
-    <td colspan="12" class="grid estados" style="width:80%;">
+    <td colspan="11" class="grid estados">
         <table id="attribute-options-table" class="dynamic-grid motorimpostos-interestaduais" cellspacing="0" cellpadding="0">
             <thead>
                 <tr>
-                    <td colspan="5" align="center" bgcolor="#D7E5EF" style="font-weight:bold;font-size:13px;">Tabela com os impostos interestaduais</td>
+                    <td colspan="4" align="center" bgcolor="#D7E5EF" style="font-weight:bold;font-size:13px;">Tabela com os impostos por UF</td>
                 </tr>
             </thead>
             <tbody>
                 <tr class="headings">
-                    <th style="text-align:center; width:400px;" title="Produto">Estado</th>
+                    <th style="text-align:center; width:300px;" title="Produto">Estado</th>
                     <th style="text-align:center; width:200px;" title="<?php echo utf8_encode('Alíq. ICMS'); ?>"><?php echo utf8_encode('Alíq. ICMS'); ?></th>
                     <th style="text-align:center; width:200px;" title="<?php echo utf8_encode('Alíq. Interestadual'); ?>"><?php echo utf8_encode('Alíq. Interestadual'); ?></th>
                     <th style="text-align:center; width:200px;" title="<?php echo utf8_encode('Alíq. FCP'); ?>"><?php echo utf8_encode('Alíq. Fundo Combate Pobreza'); ?></th>
-                    <th style="text-align:center; width:200px;" title="IVA/MVA">IVA/MVA</th>
                 </tr>
                 <?php foreach ($collection as $impostoUf): ?>
                 <tr class="option-row motorimpostos-interestaduais-estadorow" id="estado-row-<?php echo $_counter?>">                    
                     <td>
                         <?php
-                        if($impostoId) {
                             $region = Mage::getModel('directory/region')->load($impostoUf->getRegionId());
                             $estadoLabel = $region->getDefaultName();
-                        } else {
-                            $estadoLabel = $impostoUf->getDefaultName();
-                        }
                         ?>
                         <label class="widget-option-label" id="estado<?php echo $_counter?>label"><?php echo $estadoLabel ?></label>
                     </td>
@@ -73,7 +66,6 @@ $_counter = 0;
                     <td align="center"><input id="aliquota_icms<?php echo $_counter?>value" name="<?php echo $_htmlName; ?>[value][option_<?php echo $_counter ?>][aliquota_icms]" value="<?php echo $impostoUf->getAliquotaIcms() ?>" class="validate-zero-or-greater input-text" type="text"></td>
                     <td align="center"><input id="aliquota_interestadual<?php echo $_counter?>value" name="<?php echo $_htmlName; ?>[value][option_<?php echo $_counter ?>][aliquota_interestadual]" value="<?php echo $impostoUf->getAliquotaInterestadual() ?>" class="validate-zero-or-greater input-text" type="text"></td>
                     <td align="center"><input id="aliquota_fcp<?php echo $_counter?>value" name="<?php echo $_htmlName; ?>[value][option_<?php echo $_counter ?>][aliquota_fcp]" value="<?php echo $impostoUf->getAliquotaFcp() ?>" class="validate-zero-or-greater input-text" type="text"></td>
-                    <td align="center"><input id="mva_original<?php echo $_counter?>value" name="<?php echo $_htmlName; ?>[value][option_<?php echo $_counter ?>][mva_original]" value="<?php echo $impostoUf->getMvaOriginal() ?>" class="validate-zero-or-greater input-text" type="text"></td>
                 </tr>
                 <?php 
                 $_counter++;
@@ -82,7 +74,7 @@ $_counter = 0;
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="5" align="left" style="font-style:italic;font-size:10px;"><?php echo utf8_encode('* Não é necessário incluir casas decimais, em caso de utilização pode-se optar por ponto(.) ou vírgula(,) que em ambos os casos será formatado automaticamente para a forma correta.') ?></td>
+                    <td colspan="4" align="left" style="font-style:italic;font-size:10px;"><?php echo utf8_encode('* Não é necessário incluir casas decimais, em caso de utilização pode-se optar por ponto(.) ou vírgula(,) que em ambos os casos será formatado automaticamente para a forma correta.') ?><br/><?php echo utf8_encode('** Valores válidos para todos os NCM cadastrados no módulo, exceto quando os mesmos contiverem valores específicos definidos em seu cadastro de impostos interestaduais.') ?><br/><?php echo utf8_encode('*** No caso de produtos importados a alíquota interestdual será sempre 4%, conforme definido na NT_2015_003.') ?></td>
                 </tr>
             </tfoot>
         </table>

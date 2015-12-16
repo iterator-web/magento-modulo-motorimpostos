@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Iterator_MotorImpostos>
-            <version>1.0.7</version>
+            <version>1.0.8</version>
         </Iterator_MotorImpostos>
     </modules>
     
@@ -56,6 +56,9 @@
                     <impostouf>
                         <table>iterator_motorimpostos_imposto_uf</table>
                     </impostouf>
+                    <impostoufpadrao>
+                        <table>iterator_motorimpostos_imposto_uf_padrao</table>
+                    </impostoufpadrao>
                     <cest>
                         <table>iterator_motorimpostos_cest</table>
                     </cest>

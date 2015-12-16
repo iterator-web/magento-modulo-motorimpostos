@@ -75,6 +75,18 @@ class Iterator_MotorImpostos_Block_Adminhtml_Imposto_Edit_Tab_Form extends Mage_
             'class'     => 'fieldset',
         ));
         
+        $fieldsetIcms->addField('contribuinte_codigo', 'select', array(
+            'name'      => 'contribuinte_codigo',
+            'label'     => 'Para Contribuintes',
+            'title'     => 'Para Contribuintes',
+            'values'    => array(
+               array('value' => 1, 'label' => utf8_encode('Sim')),
+               array('value' => 9, 'label' => utf8_encode('Não')),
+            ),
+            'required'  => true,
+            'after_element_html' => utf8_encode('<p class="note">Define se valores são destinados a contribuintes.</p>')
+        ));
+        
         $fieldsetIcms->addField('icms_origem', 'select', array(
             'name'      => 'icms_origem',
             'label'     => 'Origem',

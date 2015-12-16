@@ -42,7 +42,7 @@ function respondToChange(event) {
     if(elementId === 'icms_cst') {
         exibirModBcSt(document.getElementById(''+elementId+'').value);
     }
-    if(elementId.indexOf('aliquota_icms') > -1 || elementId.indexOf('mva_original') > -1) {
+    if(elementId.indexOf('aliquota_icms') > -1 || elementId.indexOf('mva_original') > -1 || elementId.indexOf('aliquota_interestadual') > -1 || elementId.indexOf('aliquota_fcp') > -1) {
         converterFloat(''+elementId+'', document.getElementById(''+elementId+'').value);
     }
 }
