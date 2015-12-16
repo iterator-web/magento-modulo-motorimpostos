@@ -52,6 +52,6 @@ class Iterator_MotorImpostos_Block_Adminhtml_Imposto_Padraouf extends Mage_Admin
     }  
  
     public function getHeaderText() {
-        return Mage::helper('motorimpostos')->__(utf8_encode('Gerenciar Alíquota - Simples Nacional'));
+        return Mage::helper('motorimpostos')->__(utf8_encode('Gerenciar Impostos Por UF'));
     }  
 }
