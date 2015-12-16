@@ -459,8 +459,13 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
         if($impostoModel->getIcmsOrigem() == '1' || $impostoModel->getIcmsOrigem() == '2' || $impostoModel->getIcmsOrigem() == '6' || $impostoModel->getIcmsOrigem() == '7') {
             $aliquotaInterestadual = 4;
         }
+        $aliquotaFcp = $impostoUfDestinatarioModel->getAliquotaFcp();
+        if(!$aliquotaFcp || $aliquotaFcp <= 0) {
+            $impostoUfPadrao = $this->getImpostoUfPadrao($estadoDestinatario);
+            $aliquotaFcp = $impostoUfPadrao->getAliquotaFcp();
+        }
         $percentualPartilha = $this->getPercentualPartilha();
-        $icmsFCP = ($icmsVBC * $impostoUfDestinatarioModel->getAliquotaFcp()) / 100;
+        $icmsFCP = ($icmsVBC * $aliquotaFcp) / 100;
         $icmsPartilhado = ($icmsVBC * ($impostoUfDestinatarioModel->getAliquotaIcms() - $aliquotaInterestadual)) / 100;
         $icmsUfDest = ($icmsPartilhado * $percentualPartilha) / 100;
         if($cstCsosn == '0' || $cstCsosn == '10' || $cstCsosn == '20' || $cstCsosn == '51' || $cstCsosn == '30' || 
@@ -475,7 +480,7 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
         $nfeProdutoImposto->setProdutoId($nfeProdutoId);
         $nfeProdutoImposto->setTipoImposto('icms_destino');
         $nfeProdutoImposto->setVBcUfDest($icmsVBC);
-        $nfeProdutoImposto->setPFcpUfDest($impostoUfDestinatarioModel->getAliquotaFcp());
+        $nfeProdutoImposto->setPFcpUfDest($aliquotaFcp);
         $nfeProdutoImposto->setPIcmsUfDest($impostoUfDestinatarioModel->getAliquotaIcms());
         $nfeProdutoImposto->setPIcmsInter($aliquotaInterestadual);
         $nfeProdutoImposto->setPIcmsInterPart($percentualPartilha);
