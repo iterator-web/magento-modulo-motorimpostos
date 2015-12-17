@@ -456,6 +456,10 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
             $impostoUfDestinatarioModel = $this->getImpostoUfPadrao($estadoDestinatario);
         }
         $aliquotaInterestadual = $impostoUfDestinatarioModel->getAliquotaInterestadual();
+        if(!$aliquotaInterestadual || $aliquotaInterestadual <= 0) {
+            $impostoUfPadrao = $this->getImpostoUfPadrao($estadoDestinatario);
+            $aliquotaInterestadual = $impostoUfPadrao->getAliquotaInterestadual();
+        }
         if($impostoModel->getIcmsOrigem() == '1' || $impostoModel->getIcmsOrigem() == '2' || $impostoModel->getIcmsOrigem() == '6' || $impostoModel->getIcmsOrigem() == '7') {
             $aliquotaInterestadual = 4;
         }
