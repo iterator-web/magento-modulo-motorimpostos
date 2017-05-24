@@ -102,10 +102,13 @@ class Iterator_MotorImpostos_Model_Motorcalculos extends Mage_Core_Model_Abstrac
     
     private function getTaxasImpostos($entradaItem) {
         $taxasImpostos = array();
+        $existeControleEstoque = Mage::getConfig()->getModuleConfig('Iterator_ControleEstoque')->is('active', 'true');
         $ncm = $this->getProdutoNcm($entradaItem);
         $origem = $this->getProdutoOrigem($entradaItem);
         $estadoDestino = Mage::getStoreConfig('tax/empresa/region_id');
-        $fornecedorUf = $this->getFornecedorUf($entradaItem->getFornecedorId());
+        if($existeControleEstoque) {
+            $fornecedorUf = $this->getFornecedorUf($entradaItem->getFornecedorId());
+        }
         $cfop = Mage::getModel('motorimpostos/cfop')->load('2403', 'codigo');
         if(!$cfop->getCfopId()) {
             echo 'Para calcular corretamente os valores referentes a substituição tributária, '

@@ -124,8 +124,8 @@ class Iterator_MotorImpostos_Block_Adminhtml_Cfop_Grid extends Mage_Adminhtml_Bl
                 'is_system' => true,
         ));
         
-        $this->addExportType('*/*/exportCsv', Mage::helper('controleestoque')->__('CSV'));
-        $this->addExportType('*/*/exportXml', Mage::helper('controleestoque')->__('XML'));
+        $this->addExportType('*/*/exportCsv', Mage::helper('nfe')->__('CSV'));
+        $this->addExportType('*/*/exportXml', Mage::helper('nfe')->__('XML'));
          
         return parent::_prepareColumns();
     }
